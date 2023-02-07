@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Univers-Toine | News{% endblock %}
+
+{% block body %}
+    {% if not news.items is same as([]) %}
+        <div class="notification mt-4 is-info">Il y a {{ news.getTotalItemCount }} news !</div>
+        {% for message in app.flashes('success') %}        
+            <div class="notification is-success">{{ message }}</div>
+        {% endfor %}
+
+        <a href="{{ path('create.news') }}" class="button is-primary">Créer une news &emsp;<i class="fas fa-arrow-right"></i></a>
+
+        <table class="table is-fullwidth is-striped mt-4">
+            <thead>
+                <th>id</th>
+                <th>Titre</th>
+                <th style="width:40%">Contenu</th>
+                <th>Date de création</th>
+                <th>Date de mise à jour</th>
+                <th>Action</th>
+            </thead>
+            <tbody>
+                {% for new in news %}
+                    <tr>
+                        <th>{{ new.id }}</th>
+                        <td>{{ new.title }}</td>
+                        <td>{{ new.content }}</td>
+                        <td>{{ new.creationDate | date('d/m/Y H:m:s') }}</td>
+                        <td>{{ new.updateDate | date('d/m/Y H:m:s') }}</td>
+                        <td>
+                            <a href="{{ path('edit.news', {id: new.id}) }}" class="button is-warning">Modifier</a>
+                            <a href="{{ path('delete.news', {id: new.id}) }}" class="button is-danger">Supprimer</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {# display navigation #}
+        <div class="pagination is-centered">
+            {{ knp_pagination_render(news) }}
+        </div>
+    {% else %}
+         <div class="notification mt-4 is-danger">Il n'y a pas de news !</div>
+    {% endif %}
+{% endblock %}
