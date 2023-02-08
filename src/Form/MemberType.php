@@ -14,6 +14,7 @@ use App\Entity\Member;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class MemberType extends AbstractType
 {
@@ -32,6 +33,12 @@ class MemberType extends AbstractType
                 'constraints' => [
                     new Assert\NotBlank(),
                     new Assert\Length(['min' => 4])
+                ]
+            ])
+            ->add('avatarFile', VichImageType::class, [
+                'label' => 'Avatar',
+                'label_attr' => [
+                    'class' => 'file-label'
                 ]
             ])
             ->add('submit', SubmitType::class, [

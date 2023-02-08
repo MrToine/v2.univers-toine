@@ -9,5 +9,9 @@
           On modifie ses infos
         </div>
     </div>
-    {{ form(form) }}
+    {{ form_start(form) }}
+      {{ form_row(form.display_name) }}
+      {{ form_label(form.avatarFile) }}
+      {{ form_widget(form.avatarFile) }}
+    {{ form_end(form) }}
 {% endblock %}

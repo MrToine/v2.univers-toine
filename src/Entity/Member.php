@@ -7,14 +7,20 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\File;
+
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[UniqueEntity('email', 'display_name')]
 #[ORM\Entity(repositoryClass: MemberRepository::class)]
 #[ORM\Table(name: '`member`')]
 #[ORM\EntityListeners(['App\EntityListener\MemberListener'])]
+#[Vich\Uploadable]
 class Member implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -26,6 +32,15 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank()]
     #[Assert\Length(min: 4, max: 50)]
     private ?string $display_name = null;
+
+    /**
+     * @Ignore
+     */
+    #[Vich\UploadableField(mapping: 'user_avatar', fileNameProperty: 'avatarName')]
+    private ?File $avatarFile = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $avatarName = null;
 
     #[ORM\Column]
     private array $roles = [];
@@ -43,12 +58,17 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $level = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotEmail()]
+    #[Assert\Email()]
     #[Assert\NotBlank()]
     private ?string $email = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $registration_date = null;
+
+    #[ORM\Column(type: 'datetime_immutable')]
+    #[Assert\NotNull()]
+    private \DateTimeImmutable $updatedAt;
+
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: News::class, orphanRemoval: true)]
     private Collection $news;
@@ -56,6 +76,7 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->registration_date = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
         $this->news = new ArrayCollection();
     }
 
@@ -67,6 +88,32 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     public function getDisplayName(): ?string
     {
         return $this->display_name;
+    }
+
+    public function setAvatarFile(?File $avatarFile = null): void
+    {
+        $this->avatarFile = $avatarFile;
+
+        if (null !== $avatarFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getAvatarFile(): ?File
+    {
+        return $this->avatarFile;
+    }
+
+    public function setAvatarName(?string $avatarName): void
+    {
+        $this->avatarName = $avatarName;
+    }
+
+    public function getAvatarName(): ?string
+    {
+        return $this->avatarName;
     }
 
     public function setDisplayName(string $display_name): self
@@ -173,6 +220,18 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRegistrationDate(\DateTimeInterface $registration_date): self
     {
         $this->registration_date = $registration_date;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

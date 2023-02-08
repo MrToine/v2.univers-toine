@@ -37,8 +37,12 @@
                                   </div>
                                 </div>
                                 <div class="content">
-                                  <p><a href="{{ path('users.edit', {id: app.user.id}) }}">Modifier mon profil</a></p>
-                                  <p><a href="{{ path('users.logout') }}">Se déconnecter</a></p>
+                                  <p>
+                                  {% if 'ROLE_ADMIN' in app.user.roles %}
+                                    <a href="{{ path('admin', {id: app.user.id}) }}" class="has-text-danger">administration</a> <br> 
+                                  {% endif %}
+                                  <p><a href="{{ path('users.edit', {id: app.user.id}) }}">Modifier mon profil</a> <br>
+                                  <p><a href="{{ path('users.logout') }}">Se déconnecter</a> <br>
                                   <time datetime="2016-1-1">Inscrit le {{ app.user.registrationDate | date('d/m/Y') }}</time>
                                 </div>
                               </div>

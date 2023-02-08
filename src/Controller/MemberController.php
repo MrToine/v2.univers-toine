@@ -1,6 +1,6 @@
 <?php
 /**
- * La fonction editPassword() ne fonctionne pas pour le moment. Pour la rendre possible, il faut qu'un des chammps de la table soit mis à jour (modification_date par ex)
+ * La fonction editPassword() ne fonctionne pas pour le moment. Pour la rendre possible, il faut qu'un des champs de la table soit mis à jour (modification_date par ex)
  */
 namespace App\Controller;
 
@@ -52,6 +52,7 @@ class MemberController extends AbstractController
         ]);
     }
 
+    #[Security("is_granted('ROLE_USER') and user === choosenUser")]
     #[Route('/users/{id}/edit/password', name: 'users.edit.password', methods: ['GET', 'POST'])]
     public function editPassword(Member $choosenUser, 
             Request $request,
