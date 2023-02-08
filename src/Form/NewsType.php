@@ -22,12 +22,6 @@ class NewsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('author_user_id', HiddenType::class, [
-                "data" => 1,
-                "constraints" => [
-                    new Assert\NotBlank()
-                ]
-            ])
             ->add('published', HiddenType::class, [
                 "data" => 1,
                 "constraints" => [

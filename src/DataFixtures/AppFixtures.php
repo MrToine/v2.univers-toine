@@ -23,6 +23,9 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
 
+        $actus = [];
+        $users = [];
+
 
         for ($i=0; $i < 10; $i++) { 
             // code...
@@ -33,10 +36,25 @@ class AppFixtures extends Fixture
                 ->setLevel(1)
                 ->setPlainPassword('password');
 
+            $users[] = $user;
             $manager->persist($user);
 
         }
 
+        for ($i=0; $i < 10; $i++) { 
+            // code...
+            $actu = new News();
+            $actu->setTitle($this->faker->word())
+                 ->setRewritedTitle($this->faker->word())
+                 ->setCategoryId(1)
+                 ->setcontent($this->faker->text())
+                 ->setPublished(1)
+                 ->setAuthor($users[1]);
+
+            $actus[] = $actu;
+            $manager->persist($actus);
+
+        }
 
         $manager->flush();
     }

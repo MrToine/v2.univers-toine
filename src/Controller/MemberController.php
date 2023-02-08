@@ -1,6 +1,6 @@
 <?php
 /**
- * La fonction editPassword() ne fonctionne pas pour le moment
+ * La fonction editPassword() ne fonctionne pas pour le moment. Pour la rendre possible, il faut qu'un des chammps de la table soit mis à jour (modification_date par ex)
  */
 namespace App\Controller;
 
@@ -65,7 +65,17 @@ class MemberController extends AbstractController
             UserPasswordHasherInterface $hasher,
             EntityManagerInterface $manager,
         ): Response
-    {   
+    {
+        if(!$this->getUser())
+        {
+            return $this->redirectToRoute('users.login');
+        }
+
+        if($this->getUser() !== $user)
+        {
+            return $this->redirectToRoute('home.index');
+        }
+           
         $form = $this->createForm(MemberPasswordType::class);
 
         $form->handleRequest($request);

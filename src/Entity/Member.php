@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MemberRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -48,9 +50,13 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $registration_date = null;
 
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: News::class, orphanRemoval: true)]
+    private Collection $news;
+
     public function __construct()
     {
         $this->registration_date = new \DateTimeImmutable();
+        $this->news = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -167,6 +173,36 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRegistrationDate(\DateTimeInterface $registration_date): self
     {
         $this->registration_date = $registration_date;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, news>
+     */
+    public function getNews(): Collection
+    {
+        return $this->news;
+    }
+
+    public function addNews(news $news): self
+    {
+        if (!$this->news->contains($news)) {
+            $this->news->add($news);
+            $news->setYes($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNews(news $news): self
+    {
+        if ($this->news->removeElement($news)) {
+            // set the owning side to null (unless already changed)
+            if ($news->getYes() === $this) {
+                $news->setYes(null);
+            }
+        }
 
         return $this;
     }

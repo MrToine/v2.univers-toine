@@ -30,9 +30,6 @@ class News
     private ?string $content = null;
 
     #[ORM\Column]
-    private ?int $author_user_id = null;
-
-    #[ORM\Column]
     private ?int $published = null;
 
     #[ORM\Column]
@@ -73,7 +70,11 @@ class News
     #[ORM\ManyToOne(inversedBy: 'news')]
     private ?NewsCats $category = null;
 
-    
+    #[ORM\ManyToOne(inversedBy: 'news')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Member $author = null;
+
+
     public function __construct()
     {
         $this->creation_date = new \DateTimeImmutable();
@@ -124,18 +125,6 @@ class News
     public function setContent(?string $content): self
     {
         $this->content = $content;
-
-        return $this;
-    }
-
-    public function getAuthorUserId(): ?int
-    {
-        return $this->author_user_id;
-    }
-
-    public function setAuthorUserId(int $author_user_id): self
-    {
-        $this->author_user_id = $author_user_id;
 
         return $this;
     }
@@ -299,5 +288,17 @@ class News
     public function __toString()
     {
         return $this->name;
+    }
+
+    public function getAuthor(): ?Member
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?Member $author): self
+    {
+        $this->author = $author;
+
+        return $this;
     }
 }

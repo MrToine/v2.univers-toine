@@ -40,6 +40,21 @@ class NewsController extends AbstractController
         ]);
     }
 
+    #[Route('/news/my', name: 'news.users.index', methods: ['GET'])]
+    public function newsById(NewsRepository $repository, PaginatorInterface $paginator, Request $request): Response
+    {
+        
+        $news = $paginator->paginate(
+        $repository->findBy(['author' => $this->getUser()]), /* query NOT result */
+        $request->query->getInt('page', 1), /*page number*/
+        5 /*limit per page*/
+        );
+
+        return $this->render('news/index.html.twig', [
+            'news' => $news
+        ]);
+    }
+
     
     /**
      * Cette méthode sert à créer une news et l'ajouter dans la base de données
@@ -61,6 +76,7 @@ class NewsController extends AbstractController
         if($form->isSubmitted() && $form->isValid())
         {
             $news = $form->getData();
+            $news->setAuthor($this->getUser());
             $manager->persist($news);
             $manager->flush();
 
