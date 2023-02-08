@@ -35,12 +35,12 @@ class News
     private ?int $published = null;
 
     #[ORM\Column]
-    private ?int $id_category = null;
+    private ?int $category_id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $publishing_start_date = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $publishing_end_date = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -68,6 +68,9 @@ class News
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Assert\NotNull()]
     private ?\DateTimeImmutable $update_date = null;
+
+    #[ORM\ManyToOne(inversedBy: 'news')]
+    private ?NewsCats $category = null;
 
     
     public function __construct()
@@ -141,14 +144,14 @@ class News
         return $this;
     }
 
-    public function getIdCategory(): ?int
+    public function getcategoryId(): ?int
     {
-        return $this->id_category;
+        return $this->category_id;
     }
 
-    public function setIdCategory(int $id_category): self
+    public function setcategoryId(int $category_id): self
     {
-        $this->id_category = $id_category;
+        $this->category_id = $category_id;
 
         return $this;
     }
@@ -271,5 +274,22 @@ class News
         $this->update_date = $update_date;
 
         return $this;
+    }
+
+    public function getCategory(): ?NewsCats
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?NewsCats $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 }

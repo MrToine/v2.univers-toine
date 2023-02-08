@@ -3,13 +3,13 @@
 {% block title %}Univers-Toine | News{% endblock %}
 
 {% block body %}
+    <a href="{{ path('create.news') }}" class="button is-primary">Créer une news &emsp;<i class="fas fa-arrow-right"></i></a>
     {% if not news.items is same as([]) %}
         <div class="notification mt-4 is-info">Il y a {{ news.getTotalItemCount }} news !</div>
         {% for message in app.flashes('success') %}        
             <div class="notification is-success">{{ message }}</div>
         {% endfor %}
 
-        <a href="{{ path('create.news') }}" class="button is-primary">Créer une news &emsp;<i class="fas fa-arrow-right"></i></a>
 
         <table class="table is-fullwidth is-striped mt-4">
             <thead>

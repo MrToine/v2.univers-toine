@@ -57,7 +57,7 @@ class NewsController extends AbstractController
         $form = $this->createForm(NewsType::class, $news);
 
         $form->handleRequest($request);
-
+        
         if($form->isSubmitted() && $form->isValid())
         {
             $news = $form->getData();

@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Univers-Toine | cats{% endblock %}
+
+{% block body %}
+    <a href="{{ path('create.news.cat') }}" class="button is-primary">Créer une catégorie &emsp;<i class="fas fa-arrow-right"></i></a>
+    {% if not cats.items is same as([]) %}
+        <div class="notification mt-4 is-info">Il y a {{ cats.getTotalItemCount }} categories !</div>
+        {% for message in app.flashes('success') %}        
+            <div class="notification is-success">{{ message }}</div>
+        {% endfor %}
+
+
+        <table class="table is-fullwidth is-striped mt-4">
+            <thead>
+                <th>id</th>
+                <th>Titre</th>
+                <th style="width:40%">Contenu</th>
+                <th>Action</th>
+            </thead>
+            <tbody>
+                {% for cat in cats %}
+                    <tr>
+                        <th>{{ cat.id }}</th>
+                        <td>{{ cat.name }}</td>
+                        <td>{{ cat.description }}</td>
+                        <td>
+                            <a href="{{ path('edit.news.cat', {id: cat.id}) }}" class="button is-warning">Modifier</a>
+                            <a href="{{ path('delete.news.cat', {id: cat.id}) }}" class="button is-danger">Supprimer</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {# display navigation #}
+        <div class="pagination is-centered">
+            {{ knp_pagination_render(cats) }}
+        </div>
+    {% else %}
+         <div class="notification mt-4 is-danger">Il n'y a pas de categories !</div>
+    {% endif %}
+{% endblock %}
