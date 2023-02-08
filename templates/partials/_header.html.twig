@@ -1,6 +1,6 @@
        <nav class="navbar is-dark is-fixed-top" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
-                <a class="navbar-item" href="<?= base_url(); ?>">Univers-toine</a>
+                <a class="navbar-item" href="{{ path('home.index') }}">Univers-toine</a>
                 <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
@@ -14,7 +14,8 @@
                 </div>
                 <div class="navbar-end">
                   <a class="navbar-item" href="{{ path('users.login') }}">Connexion</a>
-                  <a class="navbar-item" href="<?= base_url('users/register') ?>">M'enregistrer</a>
+                  <a class="navbar-item" href="{{ path('users.register') }}">M'enregistrer</a>
+                  <a href="" class="navbar-item">Profil</a>
                 </div>
             </div>
         </nav>

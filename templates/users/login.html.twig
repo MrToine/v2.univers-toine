@@ -1,6 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    {% for message in app.flashes('success') %}        
+            <div class="notification is-success">{{ message }}</div>
+        {% endfor %}
     <div class="message is-info">
         <div class="message-header">
           <p>Connexion à l'espace membre</p>
@@ -31,7 +34,7 @@
                 <div class="field is-grouped">
                     <div class="control">
                       <button class="button is-primary">Se connecter</button>
-                      <a href="" class="button is-info">S'inscrire&emsp;<i class="fas fa-arrow-right"></i></a>
+                      <a href="{{ path('users.register') }}" class="button is-info">S'inscrire&emsp;<i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
             </form>

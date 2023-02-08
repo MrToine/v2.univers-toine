@@ -22,20 +22,20 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\NotBlank()]
-    #[Assert\Length(min: 6, max: 50)]
+    #[Assert\Length(min: 4, max: 50)]
     private ?string $display_name = null;
 
     #[ORM\Column]
     private array $roles = [];
 
-    private ?string $plainPassword;
+    private ?string $plainPassword = null;
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
     #[Assert\NotBlank()]
     #[Assert\Length(min: 8)]
-    private ?string $password = null;
+    private ?string $password = 'password';
 
     #[ORM\Column]
     private ?int $level = null;

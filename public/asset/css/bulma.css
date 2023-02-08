@@ -1,5 +1,8 @@
 /*! bulma.io v0.9.4 | MIT License | github.com/jgthms/bulma */
 /* Bulma Utilities */
+
+/* fonc orriginal #0f2537 */
+
 .button, .input, .textarea, .select select, .file-cta,
 .file-name, .pagination-previous,
 .pagination-next,
@@ -315,7 +318,7 @@ th:not([align]) {
 }
 
 html {
-  background-color: #0f2537;
+  background-color: #394165;
   font-size: 16px;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
