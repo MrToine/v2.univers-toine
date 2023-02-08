@@ -3,11 +3,13 @@
 namespace App\DataFixtures;
 
 use App\Entity\News;
+use App\Entity\Member;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Generator;
 use Faker\Factory;
 use App\DataFixtures;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
@@ -24,22 +26,15 @@ class AppFixtures extends Fixture
 
         for ($i=0; $i < 10; $i++) { 
             // code...
-            $news = new News();
-            $news->setTitle($this->faker->word())
-                 ->setRewritedTitle($this->faker->slug())
-                 ->setContent($this->faker->paragraph())
-                 ->setAuthorUserId($this->faker->randomDigit())
-                 ->setPublished(1)
-                 ->setIdCategory($this->faker->randomDigit())
-                 ->setPublishingStartDate(0)
-                 ->setPublishingEndDate(0)
-                 ->setSources('a:0{}')
-                 ->setViewsNumber($this->faker->randomDigit())
-                 ->setSummary('')
-                 ->setAuthorCustomName('')
-                 ->setThumbnail($this->faker->imageUrl(640, 480, 'animals', true))
-                 ->setTopListEnabled(0);
-            $manager->persist($news);
+            $user = new Member();
+            $user->setDisplayName($this->faker->FirstName())
+                ->setRoles(['ROLE_USER'])
+                ->setEmail($this->faker->email())
+                ->setLevel(1)
+                ->setPlainPassword('password');
+
+            $manager->persist($user);
+
         }
 
 

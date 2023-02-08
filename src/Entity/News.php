@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: NewsRepository::class)]
@@ -78,6 +79,13 @@ class News
         $this->creation_date = new \DateTimeImmutable();
         $this->update_date = new \DateTimeImmutable();
     }
+
+    #[ORM\PrePersist()]
+    public function setUpdateValue()
+    {
+        $this->update_date = new \DateTimeImmutable();
+    }
+
 
     public function getId(): ?int
     {

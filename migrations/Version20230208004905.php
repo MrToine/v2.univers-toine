@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230207223518 extends AbstractMigration
+final class Version20230208004905 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,16 +20,13 @@ final class Version20230207223518 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE news ADD category_id INT NOT NULL');
-        $this->addSql('ALTER TABLE news ADD CONSTRAINT FK_1DD3995012469DE2 FOREIGN KEY (category_id) REFERENCES news_cats (id)');
-        $this->addSql('CREATE INDEX IDX_1DD3995012469DE2 ON news (category_id)');
+        $this->addSql('DROP TABLE tag');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE news DROP FOREIGN KEY FK_1DD3995012469DE2');
-        $this->addSql('DROP INDEX IDX_1DD3995012469DE2 ON news');
-        $this->addSql('ALTER TABLE news DROP category_id');
+        $this->addSql('DROP TABLE tag');
+        $this->addSql('ALTER TABLE news CHANGE thumbnail thumbnail VARCHAR(255) DEFAULT NULL, CHANGE top_list_enabled top_list_enabled LONGTEXT DEFAULT NULL');
     }
 }
