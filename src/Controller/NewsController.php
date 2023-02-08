@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -63,6 +64,7 @@ class NewsController extends AbstractController
      * @param EntityManagerInterface $manager
      */
     #[Route('/news/add', name: 'create.news', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
     public function add(
             Request $request,
             EntityManagerInterface $manager

@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -20,23 +21,15 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class MemberController extends AbstractController
 {
+    #[Security("is_granted('ROLE_USER') and user === choosenUser")]
     #[Route('/users/{id}/edit', name: 'users.edit', methods: ['GET', 'POST'])]
-    public function edit(Member $user,
+    public function edit(
+        Member $choosenUser,
         Request $request, 
         EntityManagerInterface $manager): Response
     {
 
-        if(!$this->getUser())
-        {
-            return $this->redirectToRoute('users.login');
-        }
-
-        if($this->getUser() !== $user)
-        {
-            return $this->redirectToRoute('home.index');
-        }
-
-        $form = $this->createForm(MemberType::class, $user);
+        $form = $this->createForm(MemberType::class, $choosenUser);
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid())
@@ -60,21 +53,12 @@ class MemberController extends AbstractController
     }
 
     #[Route('/users/{id}/edit/password', name: 'users.edit.password', methods: ['GET', 'POST'])]
-    public function editPassword(Member $user, 
+    public function editPassword(Member $choosenUser, 
             Request $request,
             UserPasswordHasherInterface $hasher,
             EntityManagerInterface $manager,
         ): Response
     {
-        if(!$this->getUser())
-        {
-            return $this->redirectToRoute('users.login');
-        }
-
-        if($this->getUser() !== $user)
-        {
-            return $this->redirectToRoute('home.index');
-        }
            
         $form = $this->createForm(MemberPasswordType::class);
 
@@ -82,15 +66,15 @@ class MemberController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid())
         {
-            if($hasher->isPasswordValid($user, $form->getData()['plainPassword']))
+            if($hasher->isPasswordValid($choosenUser, $form->getData()['plainPassword']))
             {
-                $user->setPlainPassword($form->getData()['new_password']);
+                $choosenUser->setPlainPassword($form->getData()['new_password']);
                 $this->addFlash(
                 'success',
                 'Le mot de passe à bien été modifié' 
                 );
 
-                $manager->persist($user);
+                $manager->persist($choosenUser);
                 $manager->flush();
 
                 return $this->redirectToRoute('news.index');
