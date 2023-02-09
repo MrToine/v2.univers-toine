@@ -5,7 +5,7 @@
         <title>{% block title %}Univers-toine{% endblock %}</title>
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
             <link rel="stylesheet" href="{{ asset('asset/css/bulma.css') }}">
         {% endblock %}
 
@@ -39,10 +39,10 @@
                                 <div class="content">
                                   <p>
                                   {% if 'ROLE_ADMIN' in app.user.roles %}
-                                    <a href="{{ path('admin', {id: app.user.id}) }}" class="has-text-danger">administration</a> <br> 
+                                    <a href="{{ path('admin', {id: app.user.id}) }}" class="has-text-danger"><i class="fa-solid fa-toolbox"></i> Admin</a> | 
                                   {% endif %}
-                                  <p><a href="{{ path('users.edit', {id: app.user.id}) }}">Modifier mon profil</a> <br>
-                                  <p><a href="{{ path('users.logout') }}">Se déconnecter</a> <br>
+                                  <a href="{{ path('users.profile', {id: app.user.id}) }}"><i class="fa-solid fa-address-card"></i> Profil</a> | 
+                                  <a href="{{ path('users.logout') }}"><i class="fa-solid fa-power-off"></i> Partir</a></p>
                                   <time datetime="2016-1-1">Inscrit le {{ app.user.registrationDate | date('d/m/Y') }}</time>
                                 </div>
                               </div>

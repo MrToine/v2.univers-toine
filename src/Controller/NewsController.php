@@ -41,6 +41,17 @@ class NewsController extends AbstractController
         ]);
     }
 
+    #[Route('/news/{id}', name: 'news.view', methods: ['GET'])]
+    public function showNews(
+        NewsRepository $repository,
+        News $news,
+        Request $request, ): Response
+    {
+        $news = $repository->find(['id' => $news]);
+        
+        return $this->render('news/view.html.twig', ['news' => $news]);
+    }
+
     #[Route('/news/my', name: 'news.users.index', methods: ['GET'])]
     public function newsById(NewsRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {

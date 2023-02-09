@@ -5,6 +5,7 @@
 namespace App\Controller;
 
 use App\Entity\Member;
+use App\Repository\MemberRepository;
 use App\Form\MemberType;
 use App\Form\MemberPasswordType;
 
@@ -69,6 +70,7 @@ class MemberController extends AbstractController
         {
             if($hasher->isPasswordValid($choosenUser, $form->getData()['plainPassword']))
             {
+                $choosenUser->setUpdatedAt(new \DateTimeImmutable());
                 $choosenUser->setPlainPassword($form->getData()['new_password']);
                 $this->addFlash(
                 'success',
@@ -87,5 +89,16 @@ class MemberController extends AbstractController
         }
 
         return $this->render('users/edit_password.html.twig', ['form' => $form->createView()]);
+    }
+
+    #[Route('/users/profile/{id}', name: 'users.profile', methods: ['GET', 'POST'])]
+    public function viewProfile(
+        MemberRepository $repository,
+        Member $choosenUser,
+        Request $request, ): Response
+    {
+        $user = $repository->find(['id' => $choosenUser]);
+        
+        return $this->render('users/profile.html.twig', ['user' => $user]);
     }
 }

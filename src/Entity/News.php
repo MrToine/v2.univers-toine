@@ -287,7 +287,7 @@ class News
 
     public function __toString()
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function getAuthor(): ?Member

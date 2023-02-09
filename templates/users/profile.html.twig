@@ -1,0 +1,10 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+	<h1 class="title is-1">Profil de {{ user.displayName }}</h1>
+	<hr>
+	{% if app.user is same as user %}
+		<a href="{{ path('users.edit', {id: app.user.id}) }}" class="button is-primary">Modifier mon profil</a>
+	{% endif %}
+
+{% endblock %}
