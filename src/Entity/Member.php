@@ -73,11 +73,19 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: News::class, orphanRemoval: true)]
     private Collection $news;
 
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: ForumTopic::class)]
+    private Collection $topic;
+
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: ForumPost::class)]
+    private Collection $post;
+
     public function __construct()
     {
         $this->registration_date = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
         $this->news = new ArrayCollection();
+        $this->topic = new ArrayCollection();
+        $this->post = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -260,6 +268,66 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($news->getYes() === $this) {
                 $news->setYes(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ForumTopic>
+     */
+    public function getTopic(): Collection
+    {
+        return $this->topic;
+    }
+
+    public function addTopic(ForumTopic $topic): self
+    {
+        if (!$this->topic->contains($topic)) {
+            $this->topic->add($topic);
+            $topic->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTopic(ForumTopic $topic): self
+    {
+        if ($this->topic->removeElement($topic)) {
+            // set the owning side to null (unless already changed)
+            if ($topic->getAuthor() === $this) {
+                $topic->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ForumPost>
+     */
+    public function getPost(): Collection
+    {
+        return $this->post;
+    }
+
+    public function addPost(ForumPost $post): self
+    {
+        if (!$this->post->contains($post)) {
+            $this->post->add($post);
+            $post->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removePost(ForumPost $post): self
+    {
+        if ($this->post->removeElement($post)) {
+            // set the owning side to null (unless already changed)
+            if ($post->getAuthor() === $this) {
+                $post->setAuthor(null);
             }
         }
 

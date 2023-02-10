@@ -41,21 +41,9 @@ class NewsController extends AbstractController
         ]);
     }
 
-    #[Route('/news/{id}', name: 'news.view', methods: ['GET'])]
-    public function showNews(
-        NewsRepository $repository,
-        News $news,
-        Request $request, ): Response
-    {
-        $news = $repository->find(['id' => $news]);
-        
-        return $this->render('news/view.html.twig', ['news' => $news]);
-    }
-
     #[Route('/news/my', name: 'news.users.index', methods: ['GET'])]
     public function newsById(NewsRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
-        
         $news = $paginator->paginate(
         $repository->findBy(['author' => $this->getUser()]), /* query NOT result */
         $request->query->getInt('page', 1), /*page number*/
@@ -81,7 +69,9 @@ class NewsController extends AbstractController
             EntityManagerInterface $manager
         ): Response
     {
+
         $news = new News();
+
         $form = $this->createForm(NewsType::class, $news);
 
         $form->handleRequest($request);
@@ -107,7 +97,8 @@ class NewsController extends AbstractController
         ]);
     }
 
-     #[Route('/news/edit/{id}', name: 'edit.news', methods: ['GET', 'POST'])]
+    #[Route('/news/edit/{id}', name: 'edit.news', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
     public function edit( 
             News $news,
             Request $request,
@@ -168,4 +159,16 @@ class NewsController extends AbstractController
 
         return $this->redirectToRoute('news.index');
     }
+
+    #[Route('/news/{id}', name: 'news.view', methods: ['GET'])]
+    public function showNews(
+        NewsRepository $repository,
+        News $news,
+        Request $request, ): Response
+    {
+        $news = $repository->find(['id' => $news]);
+        
+        return $this->render('news/view.html.twig', ['news' => $news]);
+    }
+
 }

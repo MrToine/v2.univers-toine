@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1 class="title is-1">Forum</h1>
+	{% for cat in categories %}
+		<h5 class="title is-5"><a href="" title="" class="has-text-info">{{ cat.name }}</a></h5>
+		<div class="columns is-flex-wrap-wrap">
+			{% for forum in forums %}
+				{% if forum.category is same as(cat) %}
+					<div class="column is-one-quarter">
+						<div class="card" style="height:300px;background: rgba(255,255,255,0.3);">
+								 <div class="card-content">
+								   <div class="media">
+								    <a href="">	
+									     <div class="media-content" style="border: 0 1 0 1">
+								        	<p class="title is-4 has-text-dark">{{ forum.name }}</p>
+								      	</div>
+									</a>
+							    </div>
+							    <div class="content">
+							    	<hr style="margin:  0 -5px 0 -5px; background-color: #666;">
+							      	{{ forum.description }}
+							      	<hr style="margin:  0 -5px 0 -5px; background-color: #666;">
+							      	{% if topic.forum is same as(forum) %}
+							      		<i>Dernier message : <a href="">{{ topic.name }} [Le {{ topic.createAt | date('d/m/Y à H:i') }}]</a> par <a href="{{ path('users.profile', {id: topic.author.id}) }}" title="">{{ topic.author.displayName }}</a></i><br>
+							      	{% else %}
+							      		<span class="has-text-warning">Aucun message dans ce forum</span>
+							      	{% endif %}
+							    </div>
+							 </div>
+						</div>
+					</div>
+				{% endif %}
+			{% endfor %}
+		</div>
+	{% endfor %}
+{% endblock %}

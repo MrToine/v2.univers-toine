@@ -1,4 +1,8 @@
 <?php
+/**
+* @ORM\Entity
+* @ORM\Table(name="V1SsPhPb_news")
+*/
 
 namespace App\Entity;
 
@@ -35,29 +39,8 @@ class News
     #[ORM\Column]
     private ?int $category_id = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $publishing_start_date = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $publishing_end_date = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $sources = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $views_number = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $summary = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $author_custom_name = null;
-
     #[ORM\Column(length: 255)]
     private ?string $thumbnail = null;
-
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $top_list_enabled = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Assert\NotNull()]
@@ -153,78 +136,6 @@ class News
         return $this;
     }
 
-    public function getPublishingStartDate(): ?int
-    {
-        return $this->publishing_start_date;
-    }
-
-    public function setPublishingStartDate(int $publishing_start_date): self
-    {
-        $this->publishing_start_date = $publishing_start_date;
-
-        return $this;
-    }
-
-    public function getPublishingEndDate(): ?int
-    {
-        return $this->publishing_end_date;
-    }
-
-    public function setPublishingEndDate(int $publishing_end_date): self
-    {
-        $this->publishing_end_date = $publishing_end_date;
-
-        return $this;
-    }
-
-    public function getSources(): ?string
-    {
-        return $this->sources;
-    }
-
-    public function setSources(?string $sources): self
-    {
-        $this->sources = $sources;
-
-        return $this;
-    }
-
-    public function getViewsNumber(): ?int
-    {
-        return $this->views_number;
-    }
-
-    public function setViewsNumber(?int $views_number): self
-    {
-        $this->views_number = $views_number;
-
-        return $this;
-    }
-
-    public function getSummary(): ?string
-    {
-        return $this->summary;
-    }
-
-    public function setSummary(?string $summary): self
-    {
-        $this->summary = $summary;
-
-        return $this;
-    }
-
-    public function getAuthorCustomName(): ?string
-    {
-        return $this->author_custom_name;
-    }
-
-    public function setAuthorCustomName(?string $author_custom_name): self
-    {
-        $this->author_custom_name = $author_custom_name;
-
-        return $this;
-    }
-
     public function getThumbnail(): ?string
     {
         return $this->thumbnail;
@@ -233,18 +144,6 @@ class News
     public function setThumbnail(string $thumbnail): self
     {
         $this->thumbnail = $thumbnail;
-
-        return $this;
-    }
-
-    public function getTopListEnabled(): ?string
-    {
-        return $this->top_list_enabled;
-    }
-
-    public function setTopListEnabled(string $top_list_enabled): self
-    {
-        $this->top_list_enabled = $top_list_enabled;
 
         return $this;
     }
