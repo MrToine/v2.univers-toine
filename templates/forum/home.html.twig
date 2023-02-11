@@ -9,9 +9,9 @@
 				{% if forum.category is same as(cat) %}
 					<div class="column is-one-quarter">
 						<div class="card" style="height:300px;background: rgba(255,255,255,0.3);">
-								 <div class="card-content">
-								   <div class="media">
-								    <a href="">	
+							<div class="card-content">
+								<div class="media">
+								    <a href="{{ path('forum.topic.list', {id: forum.id}) }}">	
 									     <div class="media-content" style="border: 0 1 0 1">
 								        	<p class="title is-4 has-text-dark">{{ forum.name }}</p>
 								      	</div>
@@ -22,7 +22,7 @@
 							      	{{ forum.description }}
 							      	<hr style="margin:  0 -5px 0 -5px; background-color: #666;">
 							      	{% if topic.forum is same as(forum) %}
-							      		<i>Dernier message : <a href="">{{ topic.name }} [Le {{ topic.createAt | date('d/m/Y à H:i') }}]</a> par <a href="{{ path('users.profile', {id: topic.author.id}) }}" title="">{{ topic.author.displayName }}</a></i><br>
+							      		<i>Dernier message : <a href="">{{ topic.name }} [Le {{ topic.updateAt | date('d/m/Y à H:i') }}]</a><br>par <a href="{{ path('users.profile', {id: topic.author.id}) }}" title="">{{ topic.author.displayName }}</a></i><br>
 							      	{% else %}
 							      		<span class="has-text-warning">Aucun message dans ce forum</span>
 							      	{% endif %}

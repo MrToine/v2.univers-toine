@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1 class="title is-1">{{ forum.name }}</h1>
+<table class="table is-fullwidth" style="background-color: rgba(255,255,255,0.1);">
+	<thead>
+		<tr>
+			<th style="width: 60%">Sujet</th>
+			<th>Nombre de messages</th>
+			<th>Auteur</th>
+			<th>Dernier message</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for topic in topics %}
+			{% if topic.forum is same as(forum) %}
+				<tr>
+					<td>{{ topic.name }}</td>
+					<td>1254</td>
+					<td>{{ topic.author.displayName }}</td>
+					<td>
+							Le {{ post.createAt | date('d/m/Y à H:i') }}
+					</td>
+				</tr>
+			{% endif %}
+		{% endfor %}
+	</tbody>
+</table>
+{# display navigation #}
+<div class="pagination is-centered">
+    {{ knp_pagination_render(topics) }}
+</div>
+{% endblock %}

@@ -45,11 +45,11 @@ class ForumHomeController extends AbstractController
             ->getResult();
 
         $topic = $repositoryTopic->createQueryBuilder('t')
-             ->orderBy('t.id', 'DESC')
+             ->orderBy('t.updateAt', 'DESC')
              ->setMaxResults(1)
              ->getQuery()
              ->getOneOrNullResult();
-        
+
         return $this->render('forum/home.html.twig', [
             'categories' => $categories,
             'forums' => $forums,
