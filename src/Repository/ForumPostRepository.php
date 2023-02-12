@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\ForumPost;
+use App\Entity\ForumTopic;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -37,6 +38,17 @@ class ForumPostRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+        public function getLastPostByTopic(ForumTopic $topic)
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.topic = :topic')
+            ->setParameter('topic', $topic)
+            ->orderBy('p.createAt', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
 //    /**

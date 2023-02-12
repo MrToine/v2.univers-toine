@@ -79,6 +79,12 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: ForumPost::class)]
     private Collection $post;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $citation = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $signature = null;
+
     public function __construct()
     {
         $this->registration_date = new \DateTimeImmutable();
@@ -330,6 +336,30 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
                 $post->setAuthor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCitation(): ?string
+    {
+        return $this->citation;
+    }
+
+    public function setCitation(?string $citation): self
+    {
+        $this->citation = $citation;
+
+        return $this;
+    }
+
+    public function getSignature(): ?string
+    {
+        return $this->signature;
+    }
+
+    public function setSignature(?string $signature): self
+    {
+        $this->signature = $signature;
 
         return $this;
     }

@@ -57,6 +57,7 @@
             {% include "partials/_header.html.twig" %}
         {% endblock %}
         <main class="section" style="background-color: rgba(255,255,255, 0.1);">
+            <p>{{ app.request.attributes.get('_route') }}</p>
             <div class="columns">
                 <div class="column is-auto"></div>
                 <div class="column is-four-fifths">{% block body %}{% endblock %}</div>

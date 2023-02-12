@@ -63,7 +63,7 @@ class NewsController extends AbstractController
      * @param EntityManagerInterface $manager
      */
     #[Route('/news/add', name: 'create.news', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted('ROLE_ADMIN')]
     public function add(
             Request $request,
             EntityManagerInterface $manager

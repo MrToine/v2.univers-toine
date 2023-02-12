@@ -2,6 +2,12 @@
 
 namespace App\Controller;
 
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
+use Doctrine\ORM\Query\ResultSetMapping;
+use Doctrine\ORM\Query\SqlWalker;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Expr\Join;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,24 +43,35 @@ class ForumForumController extends AbstractController
 
         $forum = $repositoryForum->find(['id' => $forum]);
 
-        $topics = $paginator->paginate(
-            $repositoryTopic
-            ->createQueryBuilder('t')
-            ->orderBy('t.createAt', 'DESC')
-            ->getQuery()
-            ->getResult(), 
-            $request->query->getInt('page', 1), 5);
+        $topicsQuery = $repositoryTopic->createQueryBuilder('t')
+            ->select('t, p')
+            ->leftJoin('t.post', 'p', Join::WITH, 'p.createAt = (
+                SELECT MAX(p2.createAt) 
+                FROM App\Entity\ForumPost p2 
+                WHERE p2.topic = t
+            )')
+            ->orderBy('t.updateAt', 'DESC')
+            ->getQuery();
 
-        $post = $repositoryPost->createQueryBuilder('p')
-             ->orderBy('p.updateAt', 'DESC')
-             ->setMaxResults(1)
-             ->getQuery()
-             ->getOneOrNullResult();
+        $topics = $paginator->paginate(
+            $topicsQuery,
+            $request->query->getInt('page', 1),
+            20
+        );
+
+        $lastPosts = [];
+        foreach ($topics as $topic) {
+            if (!empty($topic->getPost())) {
+                $lastPost = $repositoryPost->getLastPostByTopic($topic);
+                $lastPosts[$topic->getId()] = $lastPost;
+            }
+        }
 
         return $this->render('forum/topic_list.html.twig', [
             'forum' => $forum,
             'topics' => $topics,
-            'post' => $post
+            'Lastposts' => $lastPosts,
+            'repositoryPost' => $repositoryPost
         ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTimeImmutable;
 use App\Repository\ForumPostRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -30,6 +31,18 @@ class ForumPost
     #[ORM\ManyToOne(inversedBy: 'post')]
     #[ORM\JoinColumn(nullable: false)]
     private ?ForumTopic $topic = null;
+
+    public function __construct()
+    {
+        $this->createAt = new \DateTimeImmutable();
+        $this->updateAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PrePersist()]
+    public function setUpdateValue()
+    {
+        $this->updateAt = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {

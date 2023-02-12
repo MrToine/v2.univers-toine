@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<h1 class="title is-1">{{ topic.name }}</h1>
+		{% if app.user %}
+			{% if 'ROLE_ADMIN' in app.user.roles %}
+				<p style="text-align: right;"><a href="" title="verouiller le sujet"><i class="fa-solid fa-lock has-text-danger"></i></a> <a href="" title="déplacer le sujet">&emsp;<i class="fa-sharp fa-solid fa-plane has-text-warning"></i></a></p>
+			{% endif %}
+		{% endif %}
+		{% for post in posts %}
+			{% if post.topic is same as(topic) %}
+				<table class="table is-fullwidth" style="background-color: rgba(0,0,0,0.5);">
+					<tr>
+						<td class="has-text-light" style="width:15%;background-color: rgba(0,0,0,0.3);">{{ post.author.displayName }}</td>
+						<td class="has-text-light" style="background-color: rgba(0,0,0,0.3);"><i class="fa-solid fa-hand-point-right"></i> Le {{ post.createAt | date('d/m/Y à H:i') }}</td>
+					</tr>
+					<tr>
+						<td style="width:15%;background-color: rgba(0,0,0,0.3);" class="has-text-grey" style="vertical-align:top">
+							<p><img class="image is-96x96" src="{{ asset('uploads/avatars/' ~ post.author.id ~ '/' ~ post.author.avatarName) }}" alt="Placeholder image"></p>
+							<p>Niveau: {{ post.author.level }}</p>
+							<p><small>Inscrit le {{ post.author.registrationDate | date('d/m/Y') }}</small></p>
+							<p style="border-top: 1px solid grey">{{ post.author.citation }}</p>
+						</td>
+						<td class="has-text-grey">
+							{{ post.content }}
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" class="has-text-light">{{ post.author.signature }}</td>
+					</tr>
+				</table>
+			{% endif %}
+		{% endfor %}
+		{# display navigation #}
+		<div class="pagination is-centered">
+		    {{ knp_pagination_render(posts) }}
+		</div>
+		{% if app.user %}
+			{% if topic.state is same as(1) %}
+				{{ form(form) }}
+			{% else %}
+				<p class="has-text-warning">Ce sujet est vérouillé <i class="fa-solid fa-lock"></i> </p>
+			{% endif %}
+		{% endif %}
+{% endblock %}
