@@ -16,7 +16,7 @@ class PostType extends AbstractType
         $builder
             ->add('content', TextareaType::class, [
                 "attr" => [
-                    "class" => "textarea",
+                    "class" => "textarea wysiwg",
                     "minlength" => '4',
                 ],
                 "label" => "Contenu",

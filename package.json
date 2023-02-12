@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "tinymce": "^6.3.1",
+    "trumbowyg": "^2.26.0"
+  }
+}

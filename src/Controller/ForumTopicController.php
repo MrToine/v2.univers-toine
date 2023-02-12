@@ -18,8 +18,19 @@ use App\Form\PostType;
 
 use Doctrine\ORM\EntityManagerInterface;
 
+use App\Services\HtmlSanitizer;
+
 class ForumTopicController extends AbstractController
 {
+
+    private $htmlSanitizer;
+
+    public function __construct(HtmlSanitizer $htmlSanitizer)
+    {
+        $this->htmlSanitizer = $htmlSanitizer;
+
+    }
+
     #[Route('/forum/topic/{id}', name: 'forum.topic', methods: ['GET', 'POST'])]
         public function index(
         ForumTopic $topic,
@@ -30,6 +41,7 @@ class ForumTopicController extends AbstractController
         Request $request
         ): Response 
     {   
+
         /**
          * On récupère la liste des topics dans un arrray en fixant une limite à 6 
          * @var array
@@ -46,6 +58,11 @@ class ForumTopicController extends AbstractController
             ->getQuery()
             ->getResult(), 
             $request->query->getInt('page', 1), 20);
+
+        // Sanitize each ForumPost object in the paginated results
+        foreach ($posts as $key => $post) {
+            $posts[$key] = $this->htmlSanitizer->sanitizeObj($post);
+        }
 
         $new_post = new ForumPost();
 

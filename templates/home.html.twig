@@ -16,6 +16,33 @@
 			Alors, ne perdez plus de temps et rejoignez-nous dans notre espace communautaire ! Si vous le souhaitez, vous pouvez vous inscrire via le lien "s'inscrire" et commencer à explorer notre monde passionnant dès maintenant.
 			</p>
 			<a href="register" class="button is-info">S'inscrire&emsp;<i class="fa fa-arrow-right"></i></a>
+			<h3 class="title is-3 mt-5">PatchNote 12/02/2023</h3>
+			<p><i class="fa-solid fa-pencil has-text-success"></i> Ajout d'un système de mise en forme du texte lors d'une réponse dans le forum</p>
+			<p><i class="fa-solid fa-message has-text-success"></i> Ajout de la mise en forme à l'affichage d'un message du forum</p>
+			<p><i class="fa-solid fa-screwdriver-wrench has-text-warning"></i> Modification des liens menant à un sujet. Ils pointent désormais sur la bonne page</p>
+			<p><i class="fa-solid fa-user has-text-warning"></i> Modification de la page d'un profil, actualisation des informations affichés à lécran et mise en forme revue entièrement.</p>
+
+			<h3 class="title is-3 mt-5">Fonctionnalités disponible</h3>
+			<p>
+				<h4 class="title is-4 mt-5">News</h4>
+				<ul>
+					<li>* Affichage de la liste des news sur l'accueil (plus bas ici)</li>
+					<li>* Possibilité de voir une actus dans une page dédiée en cliquant sur son titre</li>
+					<li>* Possibilité de créer une actus (admin uniquement)</li>
+				</ul>
+				<h4 class="title is-4 mt-5">Espace membre</h4>
+				<ul>
+					<li>* Connexion est inscription disponible</li>
+					<li>* Possibilité de voir un profil dans une page dédiée en cliquant sur son pseudo</li>
+					<li>* Possibilité de modifier son profil <s0pan style="color:orange">(En cours de création)</span></li>
+				</ul>
+				<h4 class="title is-4 mt-5">Forum</h4>
+				<ul>
+					<li>* Affichage de la liste de tout les forums triés par catégorie dans une page dédiée</li>
+					<li>* Liste de tout les sujets d'un forum affiché dans une page dédiée</li>
+					<li>* Possibilité de répondre à un sujet via le formulaire de réponse situé en bas de chaque sujet (Membre uniquement)</li>
+				</ul>
+			</p>
 		</div>
 	</div>
 	<h1 class="title mt-5">Dernière Actus</h1>
@@ -41,7 +68,7 @@
 			    </div>
 
 			    <div class="content">
-			      {{ new.content|length > 300 ? new.content|slice(0, 300) ~ '...' : new.content }}<a href="{{ path('news.view', {id: new.id}) }}" class="has-text-success"> Lire la suite <i class="fa-solid fa-arrow-right"></i></a>
+			      {{ new.content|raw|length > 300 ? new.content|slice(0, 300) ~ '...' : new.content|raw }}<a href="{{ path('news.view', {id: new.id}) }}" class="has-text-success"> Lire la suite <i class="fa-solid fa-arrow-right"></i></a>
 			      <br>
 			      <time datetime="2016-1-1" class="has-text-primary">Le {{ new.creationDate | date('d/m/Y à H:i') }}</time>
 			    </div>

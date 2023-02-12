@@ -7,7 +7,7 @@
 				<img style="max-width: 400px;" src="{{ asset('uploads/news/' ~ news.thumbnail) }}" alt="Placeholder image">
 			</figure>
 		</div>
-		<div class="media-content">
-			<p class="has-text-light">{{ news.content }}</p>
+		<div class="media-content has-text-light">
+			<p class="has-text-light">{{ news.content | raw }}</p>
 		</div>
 {% endblock %}

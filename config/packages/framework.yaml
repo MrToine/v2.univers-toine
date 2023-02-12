@@ -18,6 +18,14 @@ framework:
     php_errors:
         log: true
 
+    html_sanitizer:
+        enabled: true
+        sanitizers:
+            app.post_sanitizer:
+                # enable either of these
+                allow_safe_elements: true
+                allow_static_elements: true
+
 when@test:
     framework:
         test: true

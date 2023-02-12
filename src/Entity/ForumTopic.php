@@ -25,7 +25,7 @@ class ForumTopic
     private ?\DateTimeImmutable $updateAt = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $type = null;
+    private ?string $type = null;
 
     #[ORM\ManyToOne(inversedBy: 'topic')]
     #[ORM\JoinColumn(nullable: false)]
@@ -87,12 +87,12 @@ class ForumTopic
         return $this;
     }
 
-    public function getType(): ?int
+    public function getType(): ?string
     {
         return $this->type;
     }
 
-    public function setType(?int $type): self
+    public function setType(?string $type): self
     {
         $this->type = $type;
 

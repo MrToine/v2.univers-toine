@@ -1,0 +1,15 @@
+services:
+    App\HtmlSanitizer:
+        class: Symfony\Component\DomCrawler\Crawler
+        arguments:
+            - '@html_sanitizer'
+        public: false
+
+    html_sanitizer:
+        class: Symfony\Component\DomCrawler\Crawler
+        arguments:
+            - '@Symfony\Component\DependencyInjection\ContainerInterface'
+            - '@Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface'
+            - '@Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface'
+            - '@Psr\Log\LoggerInterface'
+            - { name: 'default' }

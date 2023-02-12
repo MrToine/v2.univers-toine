@@ -17,12 +17,21 @@
 		    {% if topic.forum is same as(forum) %}
 		        {% set post = repositoryPost.getLastPostByTopic(topic) %}
 		        <tr>
-		            <td></td>
+		            <td>
+		            	{% if topic.state is same as(0) %}
+		            		<i class="fa-solid fa-lock has-text-danger"></i>
+		            	{% endif %}
+
+		            	{% if topic.type is same as("pinned") %}
+		            		<i class="fa-solid fa-thumbtack has-text-primary"></i>
+		            	{% endif %}
+		            </td>
 		            <td class="has-text-grey"><a href="{{ path('forum.topic', {id: topic.id}) }}" title="">{{ topic.name }}</a></td>
 		            <td class="has-text-grey" style="text-align:center;">1254</td>
-		            <td class="has-text-grey" style="text-align:center;">{{ topic.author.displayName }}</td>
+		            <td class="has-text-grey" style="text-align:center;"><a href="{{ path('users.profile', {id: topic.author.id}) }}" title="">{{ topic.author.displayName }}</a></td>
 		            <td class="has-text-grey">
-		                    Le {{ post.createAt | date('d/m/Y à H:i') }}
+		                    <p><i class="fa-solid fa-hand-point-right"></i><a href="{{ path('forum.topic', {id: post.topic.id}) }}"> Le {{ post.createAt | date('d/m/Y à H:i') }}</a></p>
+		                    <p><small><i class="fa-solid fa-user" title="Auteur"></i> <a href="{{ path('users.profile', {id: post.author.id}) }}" title="">{{ post.author.displayName }}</a></small></p>
 		            </td>
 		        </tr>
 		    {% endif %}

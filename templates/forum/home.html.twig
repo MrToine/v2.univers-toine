@@ -22,7 +22,7 @@
 							      	{{ forum.description }}
 							      	<hr style="margin:  0 -5px 0 -5px; background-color: #666;">
 							      	{% if topic.forum is same as(forum) %}
-							      		<i>Dernier message : <a href="">{{ topic.name }} [Le {{ topic.updateAt | date('d/m/Y à H:i') }}]</a><br>par <a href="{{ path('users.profile', {id: topic.author.id}) }}" title="">{{ topic.author.displayName }}</a></i><br>
+							      		<i>Dernier message : <a href="{{ path('forum.topic', {id: topic.id}) }}">{{ topic.name }} [Le {{ topic.updateAt | date('d/m/Y à H:i') }}]</a><br>par <a href="{{ path('users.profile', {id: topic.author.id}) }}" title="">{{ topic.author.displayName }}</a></i><br>
 							      	{% else %}
 							      		<span class="has-text-warning">Aucun message dans ce forum</span>
 							      	{% endif %}

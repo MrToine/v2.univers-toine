@@ -28,16 +28,6 @@ class NewsType extends AbstractType
                     new Assert\NotBlank()
                 ]
             ])
-            ->add('publishing_start_date', HiddenType::class, [
-                "data" => 1,
-                "constraints" => [
-                ]
-            ])
-            ->add('publishing_end_date', HiddenType::class, [
-                "data" => 1,
-                "constraints" => [
-                ]
-            ])
             ->add('category')
             ->add('title', TextType::class, [
                 "attr" => [

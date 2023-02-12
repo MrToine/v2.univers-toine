@@ -7,8 +7,57 @@
     	<div class="column"><h1 class="title is-1">Profil de {{ user.displayName }}</h1></div>
     </div>
 	<hr>
-	{% if app.user is same as user %}
-		<a href="{{ path('users.edit', {id: app.user.id}) }}" class="button is-primary">Modifier mon profil</a>
-	{% endif %}
+	<div class="columns is-flex-wrap-wrap">
+		<div class="column">
+			<div class="box" style="background-color: rgba(255,255,255,0.2);color:#A8F1E7;">
+				<h4 class="subtitle is-4 has-text-light">Infos Générales</h4>
+				<p><strong>Pseudo : </strong>{{ user.displayName }}</p>
+				<p><strong>Email : </strong>{{ user.email }}</p>
+				<p><strong>Inscrit le : </strong>{{ user.registrationDate | date('d/m/Y') }}</p>
+				<hr>
+				<h4 class="subtitle is-4 has-text-light">Infos RPG</h4>
+				<p><strong>Niveau : </strong>{{ user.level }}</p>
+				<p><strong>Points Exp. : </strong> </p>
+				<p><strong>Argent : </strong> </p>
+				<p><strong>Item : </strong> </p>
 
+			</div>
+		</div>
+		<div class="column">
+			<div class="box" style="background-color: rgba(255,255,255,0.2);color:#A8F1E7;">
+				<h4 class="subtitle is-4 has-text-light">Infos Forum</h4>
+				<p><strong>Nombre de sujets créer : </strong></p>
+				<p><strong>Nombre de messages postés : </strong></p>
+				<p><strong>Dernier sujet créer : </strong></p>
+				<p><strong>Nombre post : </strong></p>
+				<hr>
+				<p><strong>Citation : </strong>{{ user.citation }}</p>
+				<p><strong>Signature : </strong></p>
+				<p>{{ user.signature }}</p>
+			</div>
+		</div>
+		<div class="column">
+			<div class="box" style="background-color: rgba(255,255,255,0.2);color:#A8F1E7;">
+				<h4 class="subtitle is-4 has-text-light">Option de membre</h4>
+				{% if app.user is same as user %}
+					<p><a class="has-text-info" style="font-weight:bold;" href="#">Modifier le profil</a></p>
+					<p><a class="has-text-info" style="font-weight:bold;" href="#">Modifier les paramètres d'affichage</a>
+					<p><a class="has-text-success" style="font-weight:bold;" href="#">Paramètres de compte</a></p>
+					<p><a class="has-text-warning" style="font-weight:bold;" href="#">Faire une demande au admins</a></p>
+				{% else %}
+					<p><a class="has-text-info" style="font-weight:bold;" href="#">Contacter</a></p>
+					<p><a class="has-text-warning" style="font-weight:bold;" href="#">Signaler</a></p>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	<div class="columns">
+		<div class="column">
+			<div class="box" style="background-color: rgba(255,255,255,0.2);">
+				<h4 class="subtitle is-4 has-text-light">
+					Biographie
+				</h4>
+			</div>
+		</div>
+	</div>
 {% endblock %}
