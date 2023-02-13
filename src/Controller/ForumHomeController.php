@@ -29,10 +29,6 @@ class ForumHomeController extends AbstractController
         Request $request
         ): Response 
     {   
-        /**
-         * On récupère la liste des news dans un arrray en fixant une limite à 6 
-         * @var array
-         */
         
         $categories = $repositoryCat->createQueryBuilder('c')
             ->orderBy('c.position')
@@ -43,17 +39,22 @@ class ForumHomeController extends AbstractController
             ->orderBy('f.position')
             ->getQuery()
             ->getResult();
-
-        $topic = $repositoryTopic->createQueryBuilder('t')
-             ->orderBy('t.updateAt', 'DESC')
-             ->setMaxResults(1)
-             ->getQuery()
-             ->getOneOrNullResult();
+        
+        $topics = [];
+        foreach ($forums as $f) {
+            $topics[$f->getId()] = $repositoryTopic->createQueryBuilder('t')
+                ->where('t.forum = :forum')
+                ->setParameter('forum', $f)
+                ->orderBy('t.updateAt', 'DESC')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+        }
 
         return $this->render('forum/home.html.twig', [
             'categories' => $categories,
             'forums' => $forums,
-            'topic' => $topic
+            'topics' => $topics
         ]);
     }
 }

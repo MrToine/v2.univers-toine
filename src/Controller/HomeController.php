@@ -18,6 +18,8 @@ class HomeController extends AbstractController {
 		Request $request
 		): Response 
 	{	
+
+
 		/**
 		 * On récupère la liste des news dans un arrray en fixant une limite à 6 
 		 * @var array

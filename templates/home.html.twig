@@ -15,12 +15,60 @@
 			<p>	
 			Alors, ne perdez plus de temps et rejoignez-nous dans notre espace communautaire ! Si vous le souhaitez, vous pouvez vous inscrire via le lien "s'inscrire" et commencer à explorer notre monde passionnant dès maintenant.
 			</p>
-			<a href="register" class="button is-info">S'inscrire&emsp;<i class="fa fa-arrow-right"></i></a>
-			<h3 class="title is-3 mt-5">PatchNote 12/02/2023</h3>
-			<p><i class="fa-solid fa-pencil has-text-success"></i> Ajout d'un système de mise en forme du texte lors d'une réponse dans le forum</p>
-			<p><i class="fa-solid fa-message has-text-success"></i> Ajout de la mise en forme à l'affichage d'un message du forum</p>
-			<p><i class="fa-solid fa-screwdriver-wrench has-text-warning"></i> Modification des liens menant à un sujet. Ils pointent désormais sur la bonne page</p>
-			<p><i class="fa-solid fa-user has-text-warning"></i> Modification de la page d'un profil, actualisation des informations affichés à lécran et mise en forme revue entièrement.</p>
+			<a href="{{ path('users.register') }}" class="button is-info">S'inscrire&emsp;<i class="fa fa-arrow-right"></i></a>
+			<p class="mt-5">
+				<h3 class="title is-3">Avancement du développement : 30%</h3>
+				<progress class="progress is-success" value="30" max="100">30%</progress>
+			</p>
+			<button class="js-modal-trigger data-target button is-info" data-target="modal-patch-12-02-23">Patch-note 12/02/2023</button>
+			<button class="js-modal-trigger data-target button is-primary is-large" data-target="modal-patch-13-02-23">Patch-note 13/02/2023</button>
+			
+			<!-- PATCHS -->
+			<div class="modal" id="modal-patch-12-02-23">
+			  <div class="modal-background"></div>
+			  <div class="modal-card">
+			    <header class="modal-card-head">
+			      <p class="modal-card-title">PatchNote 12/02/2023</p>
+			      <button class="delete" aria-label="close"></button>
+			    </header>
+			    <section class="modal-card-body has-text-dark">
+			    	<ol>			    		
+				     	<li><i class="fa-solid fa-pencil has-text-success"></i> Ajout d'un système de mise en forme du texte lors d'une réponse dans le forum</li>
+						<li><i class="fa-solid fa-message has-text-success"></i> Ajout de la mise en forme à l'affichage d'un message du forum</li>
+						<li><i class="fa-solid fa-screwdriver-wrench has-text-warning"></i> Modification des liens menant à un sujet. Ils pointent désormais sur la bonne page</li>
+						<li><i class="fa-solid fa-user has-text-warning"></i> Modification de la page d'un profil, actualisation des informations affichés à lécran et mise en forme revue entièrement.</li>
+			    	</ol>
+			    </section>
+			    <footer class="modal-card-foot">
+			    	<button class="button">Fermer</button>
+			    </footer>
+			  </div>
+			</div>
+
+			<div class="modal" id="modal-patch-13-02-23">
+			  <div class="modal-background"></div>
+			  <div class="modal-card">
+			    <header class="modal-card-head">
+			      <p class="modal-card-title">PatchNote 13/02/2023</p>
+			      <button class="delete" aria-label="close"></button>
+			    </header>
+			    <section class="modal-card-body has-text-dark">
+			    	<ol>			    		
+				     	<li><i class="fa-solid fa-pencil has-text-success"></i> Ajout de la possibilité d'éditer un message sur le forum</li>
+				     	<li><i class="fa-solid fa-pencil has-text-success"></i> Ajout de la possibilité de créer un sujet sur le forum</li>
+
+				     	<li><i class="fa-solid fa-screwdriver-wrench has-text-warning"></i> Modification des liens menant à un sujet. Il point désormais vers le message en question grâce aux ancres. </li>
+
+				     	<li><i class="fa-solid fa-trash has-text-danger"></i> Suppression du nom de la page en cours en dessous du menu</li>
+			    	</ol>
+			    </section>
+			    <footer class="modal-card-foot">
+			    	<button class="button">Fermer</button>
+			    </footer>
+			  </div>
+			</div>
+
+			<!-- END PATCHS -->
 
 			<h3 class="title is-3 mt-5">Fonctionnalités disponible</h3>
 			<p>

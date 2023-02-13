@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
 <h1 class="title is-1">Forum</h1>
 	{% for cat in categories %}
 		<h5 class="title is-5"><a href="" title="" class="has-text-info">{{ cat.name }}</a></h5>
@@ -21,10 +22,13 @@
 							    	<hr style="margin:  0 -5px 0 -5px; background-color: #666;">
 							      	{{ forum.description }}
 							      	<hr style="margin:  0 -5px 0 -5px; background-color: #666;">
-							      	{% if topic.forum is same as(forum) %}
-							      		<i>Dernier message : <a href="{{ path('forum.topic', {id: topic.id}) }}">{{ topic.name }} [Le {{ topic.updateAt | date('d/m/Y à H:i') }}]</a><br>par <a href="{{ path('users.profile', {id: topic.author.id}) }}" title="">{{ topic.author.displayName }}</a></i><br>
-							      	{% else %}
-							      		<span class="has-text-warning">Aucun message dans ce forum</span>
+							      	{% if forum.topic|length > 0 %}
+								      	{% set latestTopic = forum.topic[forum.topic|length - 1] %}
+								      	{% if latestTopic %}
+								      		<i>Dernier sujet : <a href="{{ path('forum.topic', {id: latestTopic.id}) }}">{{ latestTopic.name }} [Le {{ latestTopic.updateAt | date('d/m/Y à H:i') }}]</a><br>par <a href="{{ path('users.profile', {id: latestTopic.author.id}) }}" title="">{{ latestTopic.author.displayName }}</a></i><br>
+								      	{% else %}
+								      		<span class="has-text-warning">Aucun message dans ce forum</span>
+								      	{% endif %}
 							      	{% endif %}
 							    </div>
 							 </div>

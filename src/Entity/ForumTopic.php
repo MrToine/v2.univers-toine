@@ -43,7 +43,14 @@ class ForumTopic
 
     public function __construct()
     {
-        $this->post = new ArrayCollection();
+        $this->createAt = new \DateTimeImmutable();
+        $this->updateAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PrePersist()]
+    public function setUpdateValue()
+    {
+        $this->updateAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int

@@ -1,8 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+{% for message in app.flashes('success') %}        
+    <div class="notification is-success">{{ message }}</div>
+{% endfor %}
 <h1 class="title is-1">{{ forum.name }}</h1>
-<table class="table is-fullwidth" style="background-color: rgba(0,0,0,0.5);">
+{% if app.user %}
+	<a class="button is-small is-success" href="{{ path('forum.create.topic', {id: forum.id}) }}">Créer un sujet</a>
+{% endif %}
+<table class="table is-fullwidth mt-2" style="background-color: rgba(0,0,0,0.5);">
 	<thead>
 		<tr>
 			<th class="has-text-light"><i class="fa-solid fa-flag" title="Etat du sujet"></i></th>
@@ -14,7 +20,7 @@
 	</thead>
 	<tbody>
 		{% for topic in topics %}
-		    {% if topic.forum is same as(forum) %}
+		    {% if topic.forum is same as(forum) and topic.type is same as('pinned') %}
 		        {% set post = repositoryPost.getLastPostByTopic(topic) %}
 		        <tr>
 		            <td>
@@ -30,7 +36,30 @@
 		            <td class="has-text-grey" style="text-align:center;">1254</td>
 		            <td class="has-text-grey" style="text-align:center;"><a href="{{ path('users.profile', {id: topic.author.id}) }}" title="">{{ topic.author.displayName }}</a></td>
 		            <td class="has-text-grey">
-		                    <p><i class="fa-solid fa-hand-point-right"></i><a href="{{ path('forum.topic', {id: post.topic.id}) }}"> Le {{ post.createAt | date('d/m/Y à H:i') }}</a></p>
+		                    <p><i class="fa-solid fa-hand-point-right"></i><a href="{{ path('forum.topic', {id: post.topic.id}) }}#{{ post.id }}"> Le {{ post.createAt | date('d/m/Y à H:i') }}</a></p>
+		                    <p><small><i class="fa-solid fa-user" title="Auteur"></i> <a href="{{ path('users.profile', {id: post.author.id}) }}" title="">{{ post.author.displayName }}</a></small></p>
+		            </td>
+		        </tr>
+		    {% endif %}
+		{% endfor %}
+		{% for topic in topics %}
+		    {% if topic.forum is same as(forum) and topic.type is same as('normal') %}
+		        {% set post = repositoryPost.getLastPostByTopic(topic) %}
+		        <tr>
+		            <td>
+		            	{% if topic.state is same as(0) %}
+		            		<i class="fa-solid fa-lock has-text-danger"></i>
+		            	{% endif %}
+
+		            	{% if topic.type is same as("pinned") %}
+		            		<i class="fa-solid fa-thumbtack has-text-primary"></i>
+		            	{% endif %}
+		            </td>
+		            <td class="has-text-grey"><a href="{{ path('forum.topic', {id: topic.id}) }}" title="">{{ topic.name }}</a></td>
+		            <td class="has-text-grey" style="text-align:center;">1254</td>
+		            <td class="has-text-grey" style="text-align:center;"><a href="{{ path('users.profile', {id: topic.author.id}) }}" title="">{{ topic.author.displayName }}</a></td>
+		            <td class="has-text-grey">
+		                    <p><i class="fa-solid fa-hand-point-right"></i><a href="{{ path('forum.topic', {id: post.topic.id}) }}#{{ post.id }}"> Le {{ post.createAt | date('d/m/Y à H:i') }}</a></p>
 		                    <p><small><i class="fa-solid fa-user" title="Auteur"></i> <a href="{{ path('users.profile', {id: post.author.id}) }}" title="">{{ post.author.displayName }}</a></small></p>
 		            </td>
 		        </tr>
