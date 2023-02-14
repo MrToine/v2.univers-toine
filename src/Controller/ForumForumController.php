@@ -24,12 +24,16 @@ use App\Repository\ForumTopicRepository;
 use App\Entity\ForumPost;
 use App\Repository\ForumPostRepository;
 
+use App\Entity\Reading;
+use App\Repository\ReadingRepository;
+
 class ForumForumController extends AbstractController
 {
     #[Route('/forum/{id}', name: 'forum.topic.list', methods: ['GET'])]
     public function index(
         ForumForum $forum,
-        ForumForumRepository $repositoryForum, 
+        ReadingRepository $repositoryReading,
+        ForumForumRepository $repositoryForum,
         ForumTopicRepository $repositoryTopic,
         ForumPostRepository $repositoryPost, 
         PaginatorInterface $paginator,
@@ -42,6 +46,8 @@ class ForumForumController extends AbstractController
          */
 
         $forum = $repositoryForum->find(['id' => $forum]);
+
+        $isNotRead = $repositoryReading->findAll(['user' => $this->getUser(), 'isRead' => 1]);
 
         $topicsQuery = $repositoryTopic->createQueryBuilder('t')
             ->select('t, p')
@@ -68,6 +74,7 @@ class ForumForumController extends AbstractController
         }
 
         return $this->render('forum/topic_list.html.twig', [
+            'isNotRead' => $isNotRead,
             'forum' => $forum,
             'topics' => $topics,
             'Lastposts' => $lastPosts,

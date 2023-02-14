@@ -18,17 +18,22 @@ use App\Repository\ForumTopicRepository;
 use App\Entity\ForumPost;
 use App\Repository\ForumPostRepository;
 
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\Form\PostType;
 use App\Form\TopicType;
+
+use App\Entity\Reading;
+use App\Repository\ReadingRepository;
 
 use Doctrine\ORM\EntityManagerInterface;
 
 use App\Services\HtmlSanitizer;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 use Symfony\Bundle\SecurityBundle\Security as Security;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class ForumTopicController extends BaseController
 {
@@ -60,6 +65,9 @@ class ForumTopicController extends BaseController
     #[Route('/forum/topic/{id}', name: 'forum.topic', methods: ['GET', 'POST'])]
         public function index(
         ForumTopic $topic,
+        ReadingRepository $readingRepository,
+        ForumForumRepository $repositoryCategory,
+        ForumForumRepository $repositoryForum,
         ForumTopicRepository $repositoryTopic,
         ForumPostRepository $repositoryPost,
         PaginatorInterface $paginator,
@@ -72,6 +80,34 @@ class ForumTopicController extends BaseController
          * On récupère la liste des topics dans un arrray en fixant une limite à 6 
          * @var array
          */
+        $reading = null;
+        $categories = null;
+        $forums = null;
+
+        if($this->getUser())
+        {
+            $reading = $readingRepository->findOneBy(['user' => $this->getUser(), 'topic' => $topic]);
+            if(!$reading)
+            {
+                $reading = new Reading();
+                $reading->setUser($this->getUser());
+                $reading->setTopic($topic);
+                $reading->setIsRead(1);
+
+                $manager->persist($reading);
+                $manager->flush();
+            }
+            
+            $roles = $this->getUser()->getRoles();
+            
+            if (in_array('ROLE_MODERATOR', $roles)) {
+                $categories = $repositoryCategory->findAll();
+                $forums = $repositoryForum->findAll();
+            }
+        }
+
+
+
 
         $topic = $repositoryTopic->find(['id' => $topic]);
 
@@ -117,6 +153,8 @@ class ForumTopicController extends BaseController
         }
 
         return $this->render('forum/posts_list.html.twig', [
+            'categories' => $categories,
+            'forums' => $forums,
             'topic' => $topic,
             'posts' => $posts,
             'form' => $form,
@@ -151,7 +189,7 @@ class ForumTopicController extends BaseController
                 $type = "normal";
             }
 
-            if($request->request->get('name') != null && $request->request->get('name') != null)
+            if($request->request->get('name') != null && $request->request->get('content') != null)
             {
                 $forumTopic = new ForumTopic();
                 $forumPost = new ForumPost();

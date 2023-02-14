@@ -85,6 +85,18 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $signature = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Reading::class, orphanRemoval: true)]
+    private Collection $readings;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $experience = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $money = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $items = null;
+
     public function __construct()
     {
         $this->registration_date = new \DateTimeImmutable();
@@ -92,6 +104,7 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
         $this->news = new ArrayCollection();
         $this->topic = new ArrayCollection();
         $this->post = new ArrayCollection();
+        $this->readings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -360,6 +373,72 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSignature(?string $signature): self
     {
         $this->signature = $signature;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reading>
+     */
+    public function getReadings(): Collection
+    {
+        return $this->readings;
+    }
+
+    public function addReading(Reading $reading): self
+    {
+        if (!$this->readings->contains($reading)) {
+            $this->readings->add($reading);
+            $reading->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReading(Reading $reading): self
+    {
+        if ($this->readings->removeElement($reading)) {
+            // set the owning side to null (unless already changed)
+            if ($reading->getUser() === $this) {
+                $reading->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getExperience(): ?int
+    {
+        return $this->experience;
+    }
+
+    public function setExperience(?int $experience): self
+    {
+        $this->experience = $experience;
+
+        return $this;
+    }
+
+    public function getMoney(): ?string
+    {
+        return $this->money;
+    }
+
+    public function setMoney(?string $money): self
+    {
+        $this->money = $money;
+
+        return $this;
+    }
+
+    public function getItems(): ?string
+    {
+        return $this->items;
+    }
+
+    public function setItems(?string $items): self
+    {
+        $this->items = $items;
 
         return $this;
     }

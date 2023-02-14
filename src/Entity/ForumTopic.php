@@ -41,10 +41,14 @@ class ForumTopic
     #[ORM\JoinColumn(nullable: false)]
     private ?ForumForum $forum = null;
 
+    #[ORM\OneToMany(mappedBy: 'topic', targetEntity: Reading::class)]
+    private Collection $readings;
+
     public function __construct()
     {
         $this->createAt = new \DateTimeImmutable();
         $this->updateAt = new \DateTimeImmutable();
+        $this->readings = new ArrayCollection();
     }
 
     #[ORM\PrePersist()]
@@ -168,6 +172,36 @@ class ForumTopic
     public function setForum(?ForumForum $forum): self
     {
         $this->forum = $forum;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reading>
+     */
+    public function getReadings(): Collection
+    {
+        return $this->readings;
+    }
+
+    public function addReading(Reading $reading): self
+    {
+        if (!$this->readings->contains($reading)) {
+            $this->readings->add($reading);
+            $reading->setTopic($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReading(Reading $reading): self
+    {
+        if ($this->readings->removeElement($reading)) {
+            // set the owning side to null (unless already changed)
+            if ($reading->getTopic() === $this) {
+                $reading->setTopic(null);
+            }
+        }
 
         return $this;
     }

@@ -9,6 +9,9 @@ use App\Entity\Member;
 
 use App\Entity\ForumCategory;
 use App\Entity\ForumForum;
+use App\Entity\ForumTopic;
+
+use App\Entity\HistoricModeration;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -43,5 +46,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Catégories d\'actualités', 'fa-solid fa-list', NewsCats::class);
         yield MenuItem::linkToCrud('Catégories Forum', 'fa-solid fa-people-line', ForumCategory::class);
         yield MenuItem::linkToCrud('Forums', 'fa-solid fa-people-roof', ForumForum::class);
+        yield MenuItem::linkToCrud('Topics', 'fa-solid fa-file', ForumTopic::class);
+        yield MenuItem::linkToCrud('Historique', 'fa-solid fa-hourglass-start', HistoricModeration::class);
     }
 }

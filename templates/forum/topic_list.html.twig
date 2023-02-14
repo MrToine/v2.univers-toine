@@ -1,74 +1,94 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-{% for message in app.flashes('success') %}        
-    <div class="notification is-success">{{ message }}</div>
-{% endfor %}
-<h1 class="title is-1">{{ forum.name }}</h1>
-{% if app.user %}
-	<a class="button is-small is-success" href="{{ path('forum.create.topic', {id: forum.id}) }}">Créer un sujet</a>
-{% endif %}
-<table class="table is-fullwidth mt-2" style="background-color: rgba(0,0,0,0.5);">
-	<thead>
-		<tr>
-			<th class="has-text-light"><i class="fa-solid fa-flag" title="Etat du sujet"></i></th>
-			<th class="has-text-light" style="width:60%;text-align:center;"><i class="fa-solid fa-file" title="Titre du sujet"></i></th>
-			<th class="has-text-light" style="text-align:center;"><i class="fa-solid fa-comments" title="Nombre de messages"></i></th>
-			<th class="has-text-light" style="text-align:center;"><i class="fa-solid fa-user" title="Auteur"></i></th>
-			<th class="has-text-light" style="text-align:center;"><i class="fa-solid fa-clock" title="Dernier message"></i></th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for topic in topics %}
-		    {% if topic.forum is same as(forum) and topic.type is same as('pinned') %}
-		        {% set post = repositoryPost.getLastPostByTopic(topic) %}
-		        <tr>
-		            <td>
-		            	{% if topic.state is same as(0) %}
-		            		<i class="fa-solid fa-lock has-text-danger"></i>
-		            	{% endif %}
+	{% for message in app.flashes('success') %}        
+	    <div class="notification is-success">{{ message }}</div>
+	{% endfor %}
+	<h1 class="title is-1">{{ forum.name }}</h1>
+	{% if app.user %}
+		<a class="button is-small is-success" href="{{ path('forum.create.topic', {id: forum.id}) }}">Créer un sujet</a>
+	{% endif %}
+	<table class="table is-fullwidth mt-2" style="background-color: rgba(0,0,0,0.5);">
+		<thead>
+			<tr>
+				<th class="has-text-light"><i class="fa-solid fa-flag" title="Etat du sujet"></i></th>
+				<th class="has-text-light" style="width:60%;text-align:center;"><i class="fa-solid fa-file" title="Titre du sujet"></i></th>
+				<th class="has-text-light" style="text-align:center;"><i class="fa-solid fa-comments" title="Nombre de messages"></i></th>
+				<th class="has-text-light" style="text-align:center;"><i class="fa-solid fa-user" title="Auteur"></i></th>
+				<th class="has-text-light" style="text-align:center;"><i class="fa-solid fa-clock" title="Dernier message"></i></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for topic in topics %}
+			    {% if topic.forum is same as(forum) and topic.type is same as('pinned') %}
+			        {% set post = repositoryPost.getLastPostByTopic(topic) %}
+			        <tr>
+			            <td>
+			            	{% if topic.state is same as(0) %}
+			            		<i class="fa-solid fa-lock has-text-danger"></i>
+			            	{% endif %}
 
-		            	{% if topic.type is same as("pinned") %}
-		            		<i class="fa-solid fa-thumbtack has-text-primary"></i>
-		            	{% endif %}
-		            </td>
-		            <td class="has-text-grey"><a href="{{ path('forum.topic', {id: topic.id}) }}" title="">{{ topic.name }}</a></td>
-		            <td class="has-text-grey" style="text-align:center;">1254</td>
-		            <td class="has-text-grey" style="text-align:center;"><a href="{{ path('users.profile', {id: topic.author.id}) }}" title="">{{ topic.author.displayName }}</a></td>
-		            <td class="has-text-grey">
-		                    <p><i class="fa-solid fa-hand-point-right"></i><a href="{{ path('forum.topic', {id: post.topic.id}) }}#{{ post.id }}"> Le {{ post.createAt | date('d/m/Y à H:i') }}</a></p>
-		                    <p><small><i class="fa-solid fa-user" title="Auteur"></i> <a href="{{ path('users.profile', {id: post.author.id}) }}" title="">{{ post.author.displayName }}</a></small></p>
-		            </td>
-		        </tr>
-		    {% endif %}
-		{% endfor %}
-		{% for topic in topics %}
-		    {% if topic.forum is same as(forum) and topic.type is same as('normal') %}
-		        {% set post = repositoryPost.getLastPostByTopic(topic) %}
-		        <tr>
-		            <td>
-		            	{% if topic.state is same as(0) %}
-		            		<i class="fa-solid fa-lock has-text-danger"></i>
-		            	{% endif %}
+			            	{% if topic.type is same as("pinned") %}
+			            		<i class="fa-solid fa-thumbtack has-text-primary"></i>
+			            	{% endif %}
+			            	{% if isNotRead is defined and isNotRead|length > 0 %}
+			            		{% for reading in isNotRead %}
+			            			{% if reading.topic.id is same as(topic.id) and reading.isRead is same as(false) %}
+										<i class="fa-solid fa-kiwi-bird has-text-warning"></i>
+									{% endif %}
+			            		{% endfor %}
+			            	{% else %}
+			            		<i class="fa-solid fa-kiwi-bird has-text-warning"></i>
+			            	{% endif %}
+			            </td>
+			            <td class="has-text-grey"><a href="{{ path('forum.topic', {id: topic.id}) }}" title="">{{ topic.name }}</a></td>
+			            <td class="has-text-grey" style="text-align:center;">1254</td>
+			            <td class="has-text-grey" style="text-align:center;"><a href="{{ path('users.profile', {id: topic.author.id}) }}" title="">{{ topic.author.displayName }}</a></td>
+			            <td class="has-text-grey">
+			                    <p><i class="fa-solid fa-hand-point-right"></i><a href="{{ path('forum.topic', {id: post.topic.id}) }}#{{ post.id }}"> Le {{ post.createAt | date('d/m/Y à H:i') }}</a></p>
+			                    <p><small><i class="fa-solid fa-user" title="Auteur"></i> <a href="{{ path('users.profile', {id: post.author.id}) }}" title="">{{ post.author.displayName }}</a></small></p>
+			            </td>
+			        </tr>
+			    {% endif %}
+			{% endfor %}
+			{% for topic in topics %}
+			    {% if topic.forum is same as(forum) and topic.type is same as('normal') %}
+			        {% set post = repositoryPost.getLastPostByTopic(topic) %}
+			        <tr>
+			            <td>
+			            	{% if topic.state is same as(0) %}
+			            		<i class="fa-solid fa-lock has-text-danger"></i>
+			            	{% endif %}
 
-		            	{% if topic.type is same as("pinned") %}
-		            		<i class="fa-solid fa-thumbtack has-text-primary"></i>
-		            	{% endif %}
-		            </td>
-		            <td class="has-text-grey"><a href="{{ path('forum.topic', {id: topic.id}) }}" title="">{{ topic.name }}</a></td>
-		            <td class="has-text-grey" style="text-align:center;">1254</td>
-		            <td class="has-text-grey" style="text-align:center;"><a href="{{ path('users.profile', {id: topic.author.id}) }}" title="">{{ topic.author.displayName }}</a></td>
-		            <td class="has-text-grey">
-		                    <p><i class="fa-solid fa-hand-point-right"></i><a href="{{ path('forum.topic', {id: post.topic.id}) }}#{{ post.id }}"> Le {{ post.createAt | date('d/m/Y à H:i') }}</a></p>
-		                    <p><small><i class="fa-solid fa-user" title="Auteur"></i> <a href="{{ path('users.profile', {id: post.author.id}) }}" title="">{{ post.author.displayName }}</a></small></p>
-		            </td>
-		        </tr>
-		    {% endif %}
-		{% endfor %}
-	</tbody>
-</table>
-{# display navigation #}
-<div class="pagination is-centered">
-    {{ knp_pagination_render(topics) }}
-</div>
+			            	{% if topic.type is same as("pinned") %}
+			            		<i class="fa-solid fa-thumbtack has-text-primary"></i>
+			            	{% endif %}
+			            	{% if isNotRead is defined and isNotRead|length > 0 %}
+			            		{% for reading in isNotRead %}
+			            			{% if reading.topic.id is same as(topic.id) and reading.isRead is same as(false) %}
+										<i class="fa-solid fa-kiwi-bird has-text-warning"></i>
+									{% elseif reading.topic.id is not same as(topic.id) %}
+										
+									{% endif %}
+			            		{% endfor %}
+			            	{% else %}
+			            		<i class="fa-solid fa-kiwi-bird has-text-warning"></i>
+			            	{% endif %}   
+			            </td>
+			            <td class="has-text-grey"><a href="{{ path('forum.topic', {id: topic.id}) }}" title="">{{ topic.name }}</a></td>
+			            <td class="has-text-grey" style="text-align:center;">1254</td>
+			            <td class="has-text-grey" style="text-align:center;"><a href="{{ path('users.profile', {id: topic.author.id}) }}" title="">{{ topic.author.displayName }}</a></td>
+			            <td class="has-text-grey">
+			                    <p><i class="fa-solid fa-hand-point-right"></i><a href="{{ path('forum.topic', {id: post.topic.id}) }}#{{ post.id }}"> Le {{ post.createAt | date('d/m/Y à H:i') }}</a></p>
+			                    <p><small><i class="fa-solid fa-user" title="Auteur"></i> <a href="{{ path('users.profile', {id: post.author.id}) }}" title="">{{ post.author.displayName }}</a></small></p>
+			            </td>
+			        </tr>
+			    {% endif %}
+			{% endfor %}
+		</tbody>
+	</table>
+	{# display navigation #}
+	<div class="pagination is-centered">
+	    {{ knp_pagination_render(topics) }}
+	</div>
 {% endblock %}

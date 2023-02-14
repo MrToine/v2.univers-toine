@@ -17,18 +17,30 @@
 			</p>
 			<a href="{{ path('users.register') }}" class="button is-info">S'inscrire&emsp;<i class="fa fa-arrow-right"></i></a>
 			<p class="mt-5">
-				<h3 class="title is-3">Avancement du développement : 30%</h3>
-				<progress class="progress is-success" value="30" max="100">30%</progress>
+				<h3 class="title is-3">Avancement du développement : 40%</h3>
+				<progress class="progress is-success" value="40" max="100">40%</progress>
 			</p>
-			<button class="js-modal-trigger data-target button is-info" data-target="modal-patch-12-02-23">Patch-note 12/02/2023</button>
-			<button class="js-modal-trigger data-target button is-primary is-large" data-target="modal-patch-13-02-23">Patch-note 13/02/2023</button>
+			<p class="mt-5">
+				<h3 class="title is-3">Forum terminé à : 85%</h3>
+				<progress class="progress is-warning" value="85" max="100">85%</progress>
+			</p>
+			<div class="columns">
+				<div class="column is-2">
+					<button class="js-modal-trigger data-target button is-info" data-target="modal-patch-12-02-23">Patch-note 12/02/2023</button>
+					<button class="js-modal-trigger data-target button is-info mt-1" data-target="modal-patch-13-02-23">Patch-note 13/02/2023</button>
+				</div>
+				<div class="column is-2">
+					<button class="js-modal-trigger data-target button is-info" data-target="modal-patch-14-02-23">Patch-note 14/02/2023</button>
+					<button class="js-modal-trigger data-target button is-primary is-large mt-1" data-target="modal-patch-15-02-23">Patch-note 15/02/2023</button>
+				</div>
+			</div>
 			
 			<!-- PATCHS -->
 			<div class="modal" id="modal-patch-12-02-23">
 			  <div class="modal-background"></div>
 			  <div class="modal-card">
 			    <header class="modal-card-head">
-			      <p class="modal-card-title">PatchNote 12/02/2023</p>
+			      <p class="modal-card-title">PatchNote 12/02/2023 v2.0.0.1a</p>
 			      <button class="delete" aria-label="close"></button>
 			    </header>
 			    <section class="modal-card-body has-text-dark">
@@ -49,7 +61,7 @@
 			  <div class="modal-background"></div>
 			  <div class="modal-card">
 			    <header class="modal-card-head">
-			      <p class="modal-card-title">PatchNote 13/02/2023</p>
+			      <p class="modal-card-title">PatchNote 13/02/2023 v2.0.0.2a</p>
 			      <button class="delete" aria-label="close"></button>
 			    </header>
 			    <section class="modal-card-body has-text-dark">
@@ -68,9 +80,46 @@
 			  </div>
 			</div>
 
+			<div class="modal" id="modal-patch-14-02-23">
+			  <div class="modal-background"></div>
+			  <div class="modal-card">
+			    <header class="modal-card-head">
+			      <p class="modal-card-title">PatchNote 14/02/2023 v2.0.0.3a</p>
+			      <button class="delete" aria-label="close"></button>
+			    </header>
+			    <section class="modal-card-body has-text-dark">
+			    	<ol>			    		
+				     	<li><i class="fa-solid fa-pencil has-text-success"></i> Ajout d'outils de modérations basique.</li>
+				     	<li><i class="fa-solid fa-plus has-text-success"></i> Ajout du système de lu/non lu pour le forum. <span class="has-text-danger">(Peut rencontrer des bugs)</span></li>
+			    	</ol>
+			    </section>
+			    <footer class="modal-card-foot">
+			    	<button class="button">Fermer</button>
+			    </footer>
+			  </div>
+			</div>
+
+			<div class="modal" id="modal-patch-15-02-23">
+			  <div class="modal-background"></div>
+			  <div class="modal-card">
+			    <header class="modal-card-head">
+			      <p class="modal-card-title">PatchNote 15/02/2023 v2.0.0.4a</p>
+			      <button class="delete" aria-label="close"></button>
+			    </header>
+			    <section class="modal-card-body has-text-dark">
+			    	<ol>			    		
+				     	<li><i class="fa-solid fa-hat-wizard has-text-success"></i> Mise en place du système RPG.</li>
+			    	</ol>
+			    </section>
+			    <footer class="modal-card-foot">
+			    	<button class="button">Fermer</button>
+			    </footer>
+			  </div>
+			</div>
+
 			<!-- END PATCHS -->
 
-			<h3 class="title is-3 mt-5">Fonctionnalités disponible</h3>
+			<!--<h3 class="title is-3 mt-5">Fonctionnalités disponible</h3>
 			<p>
 				<h4 class="title is-4 mt-5">News</h4>
 				<ul>
@@ -90,7 +139,7 @@
 					<li>* Liste de tout les sujets d'un forum affiché dans une page dédiée</li>
 					<li>* Possibilité de répondre à un sujet via le formulaire de réponse situé en bas de chaque sujet (Membre uniquement)</li>
 				</ul>
-			</p>
+			</p>-->
 		</div>
 	</div>
 	<h1 class="title mt-5">Dernière Actus</h1>
