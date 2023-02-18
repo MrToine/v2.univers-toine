@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Univers-toine{% endblock %}</title>
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+            <link rel="stylesheet" href="{{ asset('asset/css/default.css') }}">
+            <link rel="stylesheet" href="{{ asset('asset/node_modules/trumbowyg/dist/ui/trumbowyg.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('asset/node_modules/trumbowyg/dist/plugins/colors/ui/trumbowyg.colors.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('asset/node_modules/trumbowyg/dist/plugins/emoji/ui/trumbowyg.emoji.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('asset/node_modules/trumbowyg/dist/plugins/preformatted/ui/trumbowyg.preformatted.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('asset/node_modules/trumbowyg/dist/plugins/mention/ui/trumbowyg.mention.min.css') }}">
+
+
+        {% endblock %}
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+    </head>
+    <body>
+        <header style="background:url({{ asset('asset/img/header_variation_3.png') }}) no-repeat;height: 313px; background-color: #3B3838; border-bottom: 1px solid black" class="section">
+            <div id="site-name-container" style="">
+                <div class="columns">
+                    <div class="column is-four-fifths">
+                        <h1 class="title is-1" id="site-name">Univers-Toine</h1>
+                        <h2 class="subtitle" style="background-color: rgba(255,255,255,0.7);width: 300px">Un lieu, des passions</h2>
+                    </div>
+                    <div class="column is-one-fifth">
+                        {% if app.user %}
+                            <div class="card">
+                              <div class="card-content" style="background-color: rgba(0,0,0,0.4);">
+                                <div class="media">
+                                  <div class="media-left">
+                                    <figure class="image is-48x48">
+                                      <img src="{{ asset('uploads/avatars/' ~ app.user.id ~ '/' ~ app.user.avatarName) }}" alt="Placeholder image">
+                                    </figure>
+                                  </div>
+                                  <div class="media-content">
+                                    <p class="title is-4">{{ app.user.displayName }} | <em>Niv.{{ app.user.level }}</em></p>
+                                    <p class="subtitle is-6">{{ app.user.money|number_format(0, ',', ' ') }}<i class="fa-solid fa-coins has-text-warning"></i></p>
+                                  </div>
+                                </div>
+                                <div class="content">
+                                  <p>
+                                  {% if 'ROLE_ADMIN' in app.user.roles %}
+                                    <a href="{{ path('admin', {id: app.user.id}) }}" class="has-text-danger"><i class="fa-solid fa-toolbox"></i> Admin</a> | 
+                                  {% endif %}
+                                  <a href="{{ path('users.profile', {id: app.user.id}) }}"><i class="fa-solid fa-address-card"></i> Profil</a> | 
+                                  <a href="{{ path('users.logout') }}"><i class="fa-solid fa-power-off"></i> Partir</a></p>
+                                  <time datetime="2016-1-1">Inscrit le {{ app.user.registrationDate | date('d/m/Y') }}</time>
+                                </div>
+                                {% for message in app.flashes('info-rpg') %} 
+                                    <span class="tag is-primary is-light">{{ message }}</span>      
+                                {% endfor %}
+                              </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="column is-one-fifth"></div>
+                </div>
+            </div>
+        </header>
+        {% block header %}
+            {% include "default/partials/_header.html.twig" %}
+        {% endblock %}
+
+        <main class="section" style="background-color: rgba(255,255,255, 0.1);">
+            <div class="columns">
+                <div class="column is-auto"></div>
+                <div class="column is-four-fifths">
+                    {% block breadcrumbs %}
+                        {% include "default/partials/_breadcrumbs.html.twig" %}
+                    {% endblock %}                    
+                    {% block body %}{% endblock %}
+                </div>
+                <div class="column is-auto"></div>
+            </div>
+        </main>
+        <span class="has-text-light"><small>Les icônes RPG par <a target="_blank" href="https://icons8.com">Icons8</a></small></span>
+    </body>
+    <!-- Import jQuery -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
+    <script src="{{ asset('asset/node_modules/trumbowyg/dist/trumbowyg.min.js') }}"></script>
+    <script src="{{ asset('asset/node_modules/trumbowyg/dist//plugins/colors/trumbowyg.colors.min.js') }}"></script>
+    <script src="{{ asset('asset/node_modules/trumbowyg/dist/plugins/emoji/trumbowyg.emoji.min.js') }}"></script>
+    <script src="{{ asset('asset/node_modules/trumbowyg/dist/plugins/preformatted/trumbowyg.preformatted.min.js') }}"></script>
+    <script src="{{ asset('asset/node_modules/trumbowyg/dist/plugins/mention/trumbowyg.mention.min.js') }}"></script>
+
+    <script>
+        // Doing this in a loaded JS file is better, I put this here for simplicity
+         $('.wysiwg').trumbowyg({
+            btnsDef: {
+                upload: {
+                    fn: function() {
+                         window.open("", "Upload", "menubar=no, status=no, scrollbars=no, width=900, height=500");
+                    },
+                    ico: 'upload'
+                }
+            },
+            btns: [
+                ['viewHTML'],
+                ['emoji'],
+                ['strong', 'em', 'del'],
+                ['foreColor', 'backColor'],
+                ['fontsize'],
+                ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+                ['foreColor', 'backColor'],
+                ['upload', 'insertImage'],
+                //['upload'],
+                //['mention'],
+                ['link'],
+                ['unorderedList', 'orderedList'],
+                ['horizontalRule'],
+                ['removeformat'],
+                ['highlight'],
+                //['preformatted'],
+            ],
+            plugins: {
+                upload: {
+                    serverPath: '',
+                    fileFieldName: 'image',
+                }
+            },
+            changeActiveDropdownIcon: true
+        });
+    </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        // Get all "navbar-burger" elements
+        const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+        // Check if there are any navbar burgers
+        if ($navbarBurgers.length > 0) {
+
+          // Add a click event on each of them
+          $navbarBurgers.forEach( el => {
+            el.addEventListener('click', () => {
+
+              // Get the target from the "data-target" attribute
+              const target = el.dataset.target;
+              const $target = document.getElementById(target);
+
+              // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+              el.classList.toggle('is-active');
+              $target.classList.toggle('is-active');
+
+            });
+          });
+        }
+      });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          // Functions to open and close a modal
+          function openModal($el) {
+            $el.classList.add('is-active');
+          }
+
+          function closeModal($el) {
+            $el.classList.remove('is-active');
+          }
+
+          function closeAllModals() {
+            (document.querySelectorAll('.modal') || []).forEach(($modal) => {
+              closeModal($modal);
+            });
+          }
+
+          // Add a click event on buttons to open a specific modal
+          (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
+            const modal = $trigger.dataset.target;
+            const $target = document.getElementById(modal);
+
+            $trigger.addEventListener('click', () => {
+              openModal($target);
+            });
+          });
+
+          // Add a click event on various child elements to close the parent modal
+          (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
+            const $target = $close.closest('.modal');
+
+            $close.addEventListener('click', () => {
+              closeModal($target);
+            });
+          });
+
+          // Add a keyboard event to close all modals
+          document.addEventListener('keydown', (event) => {
+            const e = event || window.event;
+
+            if (e.keyCode === 27) { // Escape key
+              closeAllModals();
+            }
+          });
+        });
+    </script>
+</html>

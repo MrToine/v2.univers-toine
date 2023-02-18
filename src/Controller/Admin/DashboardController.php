@@ -7,6 +7,8 @@ use App\Entity\NewsCats;
 
 use App\Entity\Member;
 
+use App\Entity\Item;
+
 use App\Entity\ForumCategory;
 use App\Entity\ForumForum;
 use App\Entity\ForumTopic;
@@ -42,6 +44,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToRoute('Revenir au site', 'fa-solid fa-rotate-left', 'home.index');
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Membres', 'fa-solid fa-users', Member::class);
+        yield MenuItem::linkToCrud('Items', 'fa-solid fa-briefcase', Item::class);
         yield MenuItem::linkToCrud('Actualités', 'fa-solid fa-newspaper', News::class);
         yield MenuItem::linkToCrud('Catégories d\'actualités', 'fa-solid fa-list', NewsCats::class);
         yield MenuItem::linkToCrud('Catégories Forum', 'fa-solid fa-people-line', ForumCategory::class);

@@ -1,0 +1,64 @@
+{% extends "default/base.html.twig" %}
+
+{% block body %}
+
+<h1 class="title is-1">Forum</h1>
+	{% for cat in categories %}
+		<h5 class="title is-5"><a href="" title="" class="has-text-info">{{ cat.name }}</a></h5>
+		<div class="columns is-flex-wrap-wrap">
+			{% for forum in forums %}
+				{% if forum.category is same as(cat) %}
+					<div class="column is-one-quarter">
+						<div class="card" style="height:300px;background: rgba(255,255,255,0.3);">
+							<div class="card-content">
+								<div class="media">
+								    <a href="{{ path('forum.topic.list', {id: forum.id}) }}">	
+									     <div class="media-content" style="border: 0 1 0 1">
+								        	<p>
+									        	<pan class="title is-4 has-text-dark">{{ forum.name }}</pan>
+											</p>
+								      	</div>
+									</a>
+							    </div>
+							    <div class="content">
+							    	<hr style="margin:  0 -5px 0 -5px; background-color: #666;">
+							      	{{ forum.description }}
+							      	<hr style="margin:  0 -5px 0 -5px; background-color: #666;">
+							      	{% if forum.topic|length > 0 %}
+								      	{% set latestTopic = forum.topic[forum.topic|length - 1] %}
+								      	{% if latestTopic %}
+								      		<i>Dernier sujet : <a href="{{ path('forum.topic', {id: latestTopic.id}) }}">{{ latestTopic.name }} [Le {{ latestTopic.updateAt | date('d/m/Y à H:i') }}]</a><br>par <a href="{{ path('users.profile', {id: latestTopic.author.id}) }}" title="">{{ latestTopic.author.displayName }}</a></i><br>
+								      	{% else %}
+								      		<span class="has-text-warning">Aucun message dans ce forum</span>
+								      	{% endif %}
+								      	{% if app.user %}
+											{% if topics[forum.id] is not null %}
+										        {% set user_has_read_topic = false %}
+										        {% for reading in topics[forum.id].readings %}
+										            {% if reading.user == app.user %}
+										                {% if reading.readAt >= topics[forum.id].updateAt %}
+											            	{% set user_has_read_topic = true %}
+											            {% else %}
+											            	{% set user_has_read_topic = false %}
+											            {% endif %}
+										            {% endif %}
+										        {% endfor %}
+										        {% if user_has_read_topic %}
+										            <!-- MESSAGE LU -->
+										        {% else %}
+										            <span class="has-text-warning"><sup>nouveau !</sup></span>
+										        {% endif %}
+										    {% else %}
+										        <span class="has-text-warning"><sup>nouveau !</sup></span>
+										    {% endif %}
+										{% endif %}
+							      	{% endif %}
+							    </div>
+							 </div>
+						</div>
+					</div>
+				{% endif %}
+			{% endfor %}
+		</div>
+	{% endfor %}
+{% endblock %}

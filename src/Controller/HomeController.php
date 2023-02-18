@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\NewsRepository;
 use App\Entity\News;
 
-class HomeController extends AbstractController {
+class HomeController extends BaseController {
 
 	#[Route('/', 'home.index', methods: ['GET'])]
 	public function index(
@@ -28,10 +28,8 @@ class HomeController extends AbstractController {
 			->setMaxResults(6)
 			->getQuery()
 			->getResult();
-
-			
 		
-		return $this->render('home.html.twig', [
+		return $this->render($this->theme .'/home.html.twig', [
             'news' => $news
         ]);
 	}

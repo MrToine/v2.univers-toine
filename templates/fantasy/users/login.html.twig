@@ -1,0 +1,44 @@
+{% extends "fantasy/base.html.twig" %}
+
+{% block body %}
+    {% for message in app.flashes('success') %}        
+            <div class="notification is-success">{{ message }}</div>
+        {% endfor %}
+    <div class="message is-info">
+        <div class="message-header">
+          <p>Connexion à l'espace membre</p>
+        </div>
+        <div class="message-body">
+          A fin de pouvoir profiter d'un espace personnel ainsi que de fonctionnalités d'interaction au sein du site, il est nécessaire de vous authentifier. Si vous ne possedez pas de compte, vous pouvez en créer ici : <a href="register">M'inscrire</a>.
+        </div>
+    </div>
+    {% if error %}
+        <div class="notification is-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+    <div class="columns">
+        <div class="column is-one-third"></div>
+        <div class="column auto">
+            <form action="{{ path('users.login') }}" method="post">
+                <div class="field">
+                    <label for="username" class="label">Nom d'utilisateur</label>
+                    <div class="control">
+                        <input id="username" class="input" type="text" name="_username" placeholder="Pseudo" value="{{ last_username }}" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="password" class="label">Mot de passe</label>
+                    <div class="control">
+                      <input id="password" class="input" type="password" name="_password" placeholder="*******" required>
+                    </div>
+                </div>
+                <div class="field is-grouped">
+                    <div class="control">
+                      <button class="button is-primary">Se connecter</button>
+                      <a href="{{ path('users.register') }}" class="button is-info">S'inscrire&emsp;<i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="column is-one-third"></div>
+    </div>
+{% endblock %}

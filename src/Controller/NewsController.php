@@ -15,7 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-class NewsController extends AbstractController
+class NewsController extends BaseController
 {   
     
     /**
@@ -36,7 +36,7 @@ class NewsController extends AbstractController
         5 /*limit per page*/
         );
 
-        return $this->render('news/index.html.twig', [
+        return $this->render($this->theme . '/news/index.html.twig', [
             'news' => $news
         ]);
     }
@@ -50,7 +50,7 @@ class NewsController extends AbstractController
         5 /*limit per page*/
         );
 
-        return $this->render('news/index.html.twig', [
+        return $this->render($this->theme . '/news/index.html.twig', [
             'news' => $news
         ]);
     }
@@ -92,7 +92,7 @@ class NewsController extends AbstractController
             return $this->redirectToRoute('news.index');
         }
 
-        return $this->render('news/add.html.twig', [
+        return $this->render($this->theme . '/news/add.html.twig', [
             'form' => $form->createView()
         ]);
     }
@@ -126,11 +126,11 @@ class NewsController extends AbstractController
             return $this->redirectToRoute('news.index');
         }
 
-        return $this->render('news/add.html.twig', [
+        return $this->render($this->theme . '/news/add.html.twig', [
             'form' => $form->createView()
         ]);
 
-         return $this->render('news/edit.html.twig', [
+         return $this->render($this->theme . '/news/edit.html.twig', [
             'form' => $form->createView()
         ]);
     }
@@ -168,7 +168,7 @@ class NewsController extends AbstractController
     {
         $news = $repository->find(['id' => $news]);
         
-        return $this->render('news/view.html.twig', ['news' => $news]);
+        return $this->render($this->theme . '/news/view.html.twig', ['news' => $news]);
     }
 
 }

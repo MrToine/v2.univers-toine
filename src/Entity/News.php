@@ -6,6 +6,8 @@
 
 namespace App\Entity;
 
+use App\Entity\Member;
+
 use App\Repository\NewsRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
@@ -27,17 +29,11 @@ class News
     #[Assert\NotBlank()]
     private ?string $title = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $rewrited_title = null;
-
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $content = null;
 
     #[ORM\Column]
     private ?int $published = null;
-
-    #[ORM\Column]
-    private ?int $category_id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $thumbnail = null;
@@ -84,18 +80,6 @@ class News
     public function setTitle(string $title): self
     {
         $this->title = $title;
-
-        return $this;
-    }
-
-    public function getRewritedTitle(): ?string
-    {
-        return $this->rewrited_title;
-    }
-
-    public function setRewritedTitle(?string $rewrited_title): self
-    {
-        $this->rewrited_title = $rewrited_title;
 
         return $this;
     }

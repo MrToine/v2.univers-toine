@@ -95,7 +95,16 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $money = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $items = null;
+    private ?string $theme = null;
+
+    #[ORM\ManyToMany(targetEntity: Item::class, inversedBy: 'member')]
+    private Collection $item;
+
+    #[ORM\Column(length: 255)]
+    private ?string $token = null;
+
+    #[ORM\Column]
+    private ?bool $token_valid = null;
 
     public function __construct()
     {
@@ -105,6 +114,7 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
         $this->topic = new ArrayCollection();
         $this->post = new ArrayCollection();
         $this->readings = new ArrayCollection();
+        $this->item = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -275,7 +285,7 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->news->contains($news)) {
             $this->news->add($news);
-            $news->setYes($this);
+            $news->setitem($this);
         }
 
         return $this;
@@ -285,8 +295,8 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->news->removeElement($news)) {
             // set the owning side to null (unless already changed)
-            if ($news->getYes() === $this) {
-                $news->setYes(null);
+            if ($news->getitem() === $this) {
+                $news->setitem(null);
             }
         }
 
@@ -431,15 +441,85 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getItems(): ?string
+    public function getTheme(): ?string
     {
-        return $this->items;
+        return $this->theme;
     }
 
-    public function setItems(?string $items): self
+    public function setTheme(?string $theme): self
     {
-        $this->items = $items;
+        $this->theme = $theme;
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Item>
+     */
+    public function getItem(): Collection
+    {
+        return $this->item;
+    }
+
+    public function addItem(Item $item): self
+    {
+        if (!$this->item->contains($item)) {
+            $this->item->add($item);
+            $item->addMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItem(Item $item): self
+    {
+        if ($this->item->removeElement($item)) {
+            $item->removeMember($this);
+        }
+
+        return $this;
+    }
+
+    public function hasItem($itemId)
+    {
+        $items = $this->getItem();
+
+        foreach ($items as $item) {
+            if ($item->getId() == $itemId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function __toString()
+    {
+        return $this->getDisplayName();
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(string $token): self
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    public function isTokenValid(): ?bool
+    {
+        return $this->token_valid;
+    }
+
+    public function setTokenValid(bool $token_valid): self
+    {
+        $this->token_valid = $token_valid;
+
+        return $this;
+    }
+
 }

@@ -1,0 +1,121 @@
+{% extends "default/base.html.twig" %}
+
+{% block body %}
+	{% for message in app.flashes('success') %}        
+    <div class="notification is-success">{{ message }}</div>
+	{% endfor %}
+	<h1 class="title is-1">{{ topic.name }}</h1>
+		{% if app.user %}
+			{% if 'ROLE_MODERATOR' in app.user.roles %}
+				<p style="text-align: right;">
+				{% if topic.state is same as(1) %}
+					<a class="js-modal-trigger data-target" href="#" data-target="modal-lockUnlock" title="verouiller le sujet"><i class="fa-solid fa-lock has-text-danger"></i></a> 
+				{% else %}
+					<a class="js-modal-trigger data-target" href="#" data-target="modal-lockUnlock" title="déverouiller le sujet"><i class="fa-solid fa-lock-open has-text-success"></i></a> 
+				{% endif %}
+				<a class="js-modal-trigger data-target" href="#" data-target="modal-move" title="déplacer le sujet">&emsp;<i class="fa-sharp fa-solid fa-plane has-text-warning"></i></a></p>
+			{% endif %}
+		{% endif %}
+		{% for post in posts %}
+			{% if post.topic is same as(topic) %}
+				<table id="{{ post.id }}" class="table is-fullwidth" style="background-color: rgba(0,0,0,0.5);">
+					<tr>
+						<td class="has-text-light" style="width:15%;background-color: rgba(0,0,0,0.3);">{{ post.author.displayName }}
+							{% for item in post.author.item %}
+								{% if item.type is same as('badge') %}
+									<img src="{{ asset(item.img) }}" alt="{{ item.name }}" title="{{ item.name }}">
+								{% endif %}
+							{% endfor %}
+						</td>
+						<td class="has-text-light" style="background-color: rgba(0,0,0,0.3);">
+							<i class="fa-solid fa-hand-point-right"></i> Le {{ post.createAt | date('d/m/Y à H:i') }}
+							{% if app.user %}
+								{% if post.author is same as(app.user) or "ROLE_ADMIN" in app.user.roles %}
+									<span style="float: right;"><a href="{{ path('forum.post.edit', {id: post.id}) }}" title="modifier le sujet"><i class="fa-solid fa-file-pen has-text-warning"></i></a></span>
+								{% endif %}
+							{% endif %}
+						</td>
+					</tr>
+					<tr>
+						<td style="width:15%;background-color: rgba(0,0,0,0.3);" class="has-text-grey" style="vertical-align:top">
+							<p><img class="image is-96x96" src="{{ asset('uploads/avatars/' ~ post.author.id ~ '/' ~ post.author.avatarName) }}" alt="Placeholder image"></p>
+							<p>Niveau: {{ post.author.level }}</p>
+							<p>{{ post.author.money|number_format(0, ',', ' ') }} <i class="fa-solid fa-coins has-text-warning"></i></p>
+							<p><small>Inscrit le {{ post.author.registrationDate | date('d/m/Y') }}</small></p>
+							<p style="border-top: 1px solid grey">{{ post.author.citation }}</p>
+						</td>
+						<td class="has-text-grey">
+							{{ post.content | raw }}
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" class="has-text-light">{{ post.author.signature }}</td>
+					</tr>
+				</table>
+			{% endif %}
+		{% endfor %}
+		{# display navigation #}
+		<div class="pagination is-centered">
+		    {{ knp_pagination_render(posts) }}
+		</div>
+		{% if app.user %}
+			{% if topic.state is same as(1) %}
+				{{ form(form) }}
+			{% else %}
+				<p class="has-text-warning">Ce sujet est vérouillé <i class="fa-solid fa-lock"></i> </p>
+			{% endif %}
+		{% endif %}
+
+		<!-- MODAL -->
+
+		{% if app.user and "ROLE_MODERATOR" in app.user.roles %}
+			<div class="modal" id="modal-lockUnlock">
+			  <div class="modal-background"></div>
+			  <div class="modal-card">
+			    <header class="modal-card-head">
+			      <p class="modal-card-title">(Dé)Verrouiller un sujet</p>
+			      <button class="delete" aria-label="close"></button>
+			    </header>
+			    <section class="modal-card-body has-text-dark">
+			    	<form action="{{ path('forum.moderation.lockUnlock', {id: topic.id}) }}">
+				    	<textarea class="textarea" name="content" placeholder="(Pas obligatoire) Vous pouvez laisser un message indiquant la raison de votre acte de modération."></textarea>
+				    {% if topic.state is same as(1) %}
+				    	<button class="button is-danger mt-2"><i class="fa-solid fa-lock"> </i>&emsp;Verrouiller</button>
+				    {% else %}
+				    	<button class="button is-success mt-2"><i class="fa-solid fa-lock-open"> </i>&emsp;Déverrouiller</button>
+				    {% endif %}
+			    	</form>
+			    </section>
+			    <footer class="modal-card-foot">
+			    	<button class="button">Fermer</button>
+			    </footer>
+			  </div>
+			</div>
+
+			<div class="modal" id="modal-move">
+			  <div class="modal-background"></div>
+			  <div class="modal-card">
+			    <header class="modal-card-head">
+			      <p class="modal-card-title">Déplacer un sujet</p>
+			      <button class="delete" aria-label="close"></button>
+			    </header>
+			    <section class="modal-card-body has-text-dark">
+			    	<form method="post" action="{{ path('forum.moderation.move', {id: topic.id}) }}">
+				    	<div class="select">
+						  <select name="forum_id">
+						    <option>Select dropdown</option>
+						    {% for forum in forums %}
+								<option value="{{ forum.id }}">{{ forum.name }}</option>
+							{% endfor %}
+						  </select>
+						</div>
+						<input type="submit" class="button is-primary" value="Déplacer">
+			    	</form>
+			    </section>
+			    <footer class="modal-card-foot">
+			    	<button class="button">Fermer</button>
+			    </footer>
+			  </div>
+			</div>
+		{% endif %}
+{% endblock %}

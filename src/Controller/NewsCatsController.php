@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-class NewsCatsController extends AbstractController
+class NewsCatsController extends BaseController
 {   
     
     /**
@@ -35,7 +35,7 @@ class NewsCatsController extends AbstractController
         5 /*limit per page*/
         );
 
-        return $this->render('news/categories/index.html.twig', [
+        return $this->render($this->theme . '/news/categories/index.html.twig', [
             'cats' => $cats
         ]);
     }
@@ -72,7 +72,7 @@ class NewsCatsController extends AbstractController
             return $this->redirectToRoute('news.cat.index');
         }
 
-        return $this->render('news/categories/add.html.twig', [
+        return $this->render($this->theme . '/news/categories/add.html.twig', [
             'form' => $form->createView()
         ]);
     }
@@ -105,11 +105,11 @@ class NewsCatsController extends AbstractController
             return $this->redirectToRoute('news.cat.index');
         }
 
-        return $this->render('news/categories/edit.html.twig', [
+        return $this->render($this->theme . '/news/categories/edit.html.twig', [
             'form' => $form->createView()
         ]);
 
-         return $this->render('news/edit.html.twig', [
+         return $this->render($this->theme . '/news/edit.html.twig', [
             'form' => $form->createView()
         ]);
     }

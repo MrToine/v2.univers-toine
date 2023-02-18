@@ -6,12 +6,27 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+use Symfony\Bundle\SecurityBundle\Security;
+
+use App\Service\LevelService;
+
 class BaseController extends AbstractController
 {
 
-    public function __construct()
+    private $levelService;
+
+    public function __construct(Security $security)
     {
-        $this->getBreadcrumbs();
+      //$this->getBreadcrumbs();
+      if($security->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+      {
+        $user = $security->getUser();
+        $this->theme = $user->getTheme();
+      }
+      else
+      {
+        $this->theme = 'default';
+      }
     }
 
     public function getBreadcrumbs()

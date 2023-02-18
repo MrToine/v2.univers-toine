@@ -1,0 +1,55 @@
+{% extends "fantasy/base.html.twig" %}
+
+{% block body %}
+
+<h1 class="title is-1">Forum</h1>
+	{% for category in categories %}
+		<table class="table is-bordered is-fullwidth">
+			<tr>
+				<th colspan="2">{{ category.name }}</th>
+			</tr>
+			{% for forum in forums %}
+				{% if forum.category is same as(category) %}
+					<tr>
+						<td style="width:75%">
+							{% if app.user %}
+								{% if topics[forum.id] is not null %}
+							        {% set user_has_read_topic = false %}
+							        {% for reading in topics[forum.id].readings %}
+							            {% if reading.user == app.user %}
+							                {% if reading.readAt >= topics[forum.id].updateAt %}
+								            	{% set user_has_read_topic = true %}
+								            {% else %}
+								            	{% set user_has_read_topic = false %}
+								            {% endif %}
+							            {% endif %}
+							        {% endfor %}
+							        {% if user_has_read_topic %}
+							            <!-- MESSAGE LU -->
+							        {% else %}
+							            <span style="font-size:18pt" class="has-text-danger">&#x2022;</span>
+							        {% endif %}
+							    {% else %}
+							        <span style="font-size:18pt" class="has-text-danger">&#x2022;</span>
+							    {% endif %}
+							{% endif %}
+							<a href="{{ path('forum.topic.list', {id: forum.id}) }}">{{ forum.name }}</a>
+							<br>
+							{{ forum.description }}
+						</td>
+						<td style="font-size: 10pt;">
+							{% if forum.topic|length > 0 %}
+								{% set latestTopic = forum.topic[forum.topic|length - 1] %}
+								{% if latestTopic %}
+									<i>[Le {{ latestTopic.updateAt | date('d/m/Y à H:i') }}]<br><a href="{{ path('forum.topic', {id: latestTopic.id}) }}">{{ latestTopic.name }}</a><br>par <a href="{{ path('users.profile', {id: latestTopic.author.id}) }}" title="">{{ latestTopic.author.displayName }}</a></i><br>
+								{% else %}
+									<span class="has-text-warning">Aucun message dans ce forum</span>
+								{% endif %}
+							{% endif %}
+						</td>
+					</tr>
+				{% endif %}
+			{% endfor %}
+		</table>
+	{% endfor %}
+{% endblock %}

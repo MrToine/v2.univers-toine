@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Univers-Toine | News{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+
+        <h1 class="title mt-4">Modification d'une catégorie</h1>
+
+        {% for message in app.flashes('success') %}        
+            <div class="notification is-success">{{ message }}</div>
+        {% endfor %}
+
+        {{ form_start(form) }}
+            <div class="form-group">
+                {{ form_row(form.name) }}
+                {{ form_errors(form.name) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(form.rewrited_name) }}
+                {{ form_errors(form.rewrited_name) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(form.thumbnail) }}
+                {{ form_errors(form.thumbnail) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(form.description) }}
+                {{ form_errors(form.description) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_row(form.submit) }}
+            </div>
+            
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

@@ -27,7 +27,7 @@ use App\Repository\ForumPostRepository;
 use App\Entity\Reading;
 use App\Repository\ReadingRepository;
 
-class ForumForumController extends AbstractController
+class ForumForumController extends BaseController
 {
     #[Route('/forum/{id}', name: 'forum.topic.list', methods: ['GET'])]
     public function index(
@@ -47,15 +47,18 @@ class ForumForumController extends AbstractController
 
         $forum = $repositoryForum->find(['id' => $forum]);
 
-        $isNotRead = $repositoryReading->findAll(['user' => $this->getUser(), 'isRead' => 1]);
-
+        $user = $this->getUser();
         $topicsQuery = $repositoryTopic->createQueryBuilder('t')
-            ->select('t, p')
+            ->select('t, p, r')
             ->leftJoin('t.post', 'p', Join::WITH, 'p.createAt = (
                 SELECT MAX(p2.createAt) 
                 FROM App\Entity\ForumPost p2 
                 WHERE p2.topic = t
             )')
+            ->leftJoin('t.readings', 'r', Join::WITH, 'r.user = :user')
+            ->setParameter('user', $user)
+            ->where('t.forum = :forum')
+            ->setParameter('forum', $forum)
             ->orderBy('t.updateAt', 'DESC')
             ->getQuery();
 
@@ -73,8 +76,8 @@ class ForumForumController extends AbstractController
             }
         }
 
-        return $this->render('forum/topic_list.html.twig', [
-            'isNotRead' => $isNotRead,
+
+        return $this->render($this->theme . '/forum/topic_list.html.twig', [
             'forum' => $forum,
             'topics' => $topics,
             'Lastposts' => $lastPosts,

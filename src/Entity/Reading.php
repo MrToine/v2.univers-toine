@@ -1,8 +1,9 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\ReadingRepository;
+use DateTimeImmutable;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ReadingRepository::class)]
@@ -13,8 +14,9 @@ class Reading
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $is_read = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    #[Assert\NotNull()]
+    private ?\DateTimeInterface $readAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'readings')]
     #[ORM\JoinColumn(nullable: false)]
@@ -25,7 +27,13 @@ class Reading
 
     public function __construct()
     {
-        $this->createAt = new \DateTimeImmutable();
+        $this->readAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PrePersist()]
+    public function setUpdateValue()
+    {
+        $this->readAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -33,14 +41,14 @@ class Reading
         return $this->id;
     }
 
-    public function isIsRead(): ?bool
+    public function getReadAt(): ?\DateTimeInterface
     {
-        return $this->is_read;
+        return $this->readAt;
     }
 
-    public function setIsRead(?bool $is_read): self
+    public function setReadAt(?\DateTimeInterface $readAt): self
     {
-        $this->is_read = $is_read;
+        $this->readAt = $readAt;
 
         return $this;
     }

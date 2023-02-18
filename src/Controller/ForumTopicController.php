@@ -9,6 +9,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use Knp\Component\Pager\PaginatorInterface;
 
+use App\Entity\Member;
+use App\Repository\MemberRepository;
+
 use App\Entity\ForumForum;
 use App\Repository\ForumForumRepository;
 
@@ -59,12 +62,13 @@ class ForumTopicController extends BaseController
         $this->htmlSanitizer = $htmlSanitizer;
         $this->security = $security;
 
-        parent::__construct();
+        parent::__construct($security);
     }
 
     #[Route('/forum/topic/{id}', name: 'forum.topic', methods: ['GET', 'POST'])]
-        public function index(
+    public function index(
         ForumTopic $topic,
+        MemberRepository $memberRepository,
         ReadingRepository $readingRepository,
         ForumForumRepository $repositoryCategory,
         ForumForumRepository $repositoryForum,
@@ -73,31 +77,25 @@ class ForumTopicController extends BaseController
         PaginatorInterface $paginator,
         EntityManagerInterface $manager,
         Request $request
-        ): Response 
+    ): Response 
     {   
-
-        /**
-         * On récupère la liste des topics dans un arrray en fixant une limite à 6 
-         * @var array
-         */
-        $reading = null;
-        $categories = null;
-        $forums = null;
 
         if($this->getUser())
         {
-            $reading = $readingRepository->findOneBy(['user' => $this->getUser(), 'topic' => $topic]);
-            if(!$reading)
-            {
-                $reading = new Reading();
-                $reading->setUser($this->getUser());
-                $reading->setTopic($topic);
-                $reading->setIsRead(1);
-
-                $manager->persist($reading);
-                $manager->flush();
-            }
+            $user = $this->getUser();
+            $reading = $readingRepository->findOneBy(['user' => $user, 'topic' => $topic]);
             
+            if ($reading === null) {
+                $reading = new Reading();
+                $reading->setUser($user);
+                $reading->setTopic($topic);
+            }
+
+            $reading->setReadAt((new \DateTimeImmutable()));
+
+            $manager->persist($reading);
+            $manager->flush();
+
             $roles = $this->getUser()->getRoles();
             
             if (in_array('ROLE_MODERATOR', $roles)) {
@@ -107,13 +105,22 @@ class ForumTopicController extends BaseController
         }
 
 
-
+        /**
+         * On récupère la liste des topics dans un arrray en fixant une limite à 6 
+         * @var array
+         */
+        $categories = null;
+        $forums = null;
 
         $topic = $repositoryTopic->find(['id' => $topic]);
 
+        // t = topic m = member mi = member_item
         $posts = $paginator->paginate(
             $repositoryPost
             ->createQueryBuilder('t')
+            ->select('t', 'mi', 'm')
+            ->leftJoin('t.author', 'm')
+            ->leftJoin('m.item', 'mi')
             ->orderBy('t.createAt')
             ->where('t.topic = :id')
             ->setParameter('id', $topic->getId())
@@ -142,6 +149,15 @@ class ForumTopicController extends BaseController
             $topic->setUpdateAt(new \DateTimeImmutable());
             $manager->persist($topic);
 
+            $memberRepository = $this->getUser();
+            $memberRepository->setExperience($memberRepository->getExperience() + 5);
+            $manager->persist($memberRepository);
+
+            $this->addFlash(
+                'info-rpg',
+                '+5xp (post forum)'
+            );
+
             $manager->flush();
 
             $this->addFlash(
@@ -149,10 +165,11 @@ class ForumTopicController extends BaseController
                 'Message créer avec succès'
             );
 
+
             return $this->redirectToRoute('forum.topic', ['id' => $topic->getId()]);
         }
 
-        return $this->render('forum/posts_list.html.twig', [
+        return $this->render($this->theme . '/forum/posts_list.html.twig', [
             'categories' => $categories,
             'forums' => $forums,
             'topic' => $topic,
@@ -166,6 +183,7 @@ class ForumTopicController extends BaseController
     public function createTopic( 
             Request $request,
             EntityManagerInterface $manager,
+            MemberRepository $memberRepository,
         ): Response
     {        
         if($request->isMethod('POST'))
@@ -207,6 +225,16 @@ class ForumTopicController extends BaseController
 
                 $manager->persist($forumTopic);
                 $manager->persist($forumPost);
+                
+                $memberRepository = $this->getUser();
+                $memberRepository->setExperience($memberRepository->getExperience() + 10);
+                $manager->persist($memberRepository);
+
+                $this->addFlash(
+                    'info-rpg',
+                    '+10xp (post forum)'
+                );
+
                 $manager->flush();
                 
                 return $this->redirectToRoute('forum.topic.list', [
@@ -224,7 +252,7 @@ class ForumTopicController extends BaseController
 
         }
 
-         return $this->render('forum/create_topic.html.twig');
+         return $this->render($this->theme . '/forum/create_topic.html.twig');
     }    
 
     #[Route('/forum/edit/post/{id}', name: 'forum.post.edit', methods: ['GET', 'POST'])]
@@ -258,7 +286,7 @@ class ForumTopicController extends BaseController
             return $this->redirectToRoute('forum.topic', ['id' => $forumPost->getTopic()->getId(), '_fragment' => $forumPost->getId()]);
         }
 
-         return $this->render('forum/edit.html.twig', [
+         return $this->render($this->theme . '/forum/edit.html.twig', [
             'form' => $form->createView()
         ]);
     }

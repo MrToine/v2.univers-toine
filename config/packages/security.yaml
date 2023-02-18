@@ -5,6 +5,9 @@ security:
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         # used to reload user from session & other features (e.g. switch_user)
+        token_provider:
+            id: App\Security\TokenRegistrationProvider
+
         app_user_provider:
             entity:
                 class: App\Entity\Member
@@ -16,10 +19,15 @@ security:
             security: false
         main:
             lazy: true
-            provider: app_user_provider
+            provider: token_provider
             form_login:
                 login_path: users.login
                 check_path: users.login
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /
+                name: remember_me
             logout:
                 path: users.logout
 

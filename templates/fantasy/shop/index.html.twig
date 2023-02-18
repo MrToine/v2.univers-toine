@@ -1,0 +1,34 @@
+{% extends "fantasy/base.html.twig" %}
+{% block body %}
+    <div class="tabs is-left">
+      <ul>
+        <li class="is-active"><a class="has-text-info">Accueil</a></li>
+        <li><a class=" has-text-light" href="{{ path('shop.themes') }}">Thèmes</a></li>
+        <li><a class=" has-text-light" href="{{ path('shop.avatar') }}">Avatars</a></li>
+        <li><a class="has-text-light">Sorts</a></li>
+      </ul>
+    </div>
+    <h2 class="title is-2">Bienvenue dans la boutique du site web !</h2>
+    <div class="container">
+        <div class="message-body">
+            <p>Bienvenue dans notre boutique en ligne où vous pouvez acheter des thèmes, des avatars, des badges et des sorts avec notre monnaie virtuelle gratuite. Vous pouvez gagner cette monnaie virtuelle en atteignant certains niveaux en tant que membre. Nous avons des prérequis sur les niveaux des membres pour s'assurer que les utilisateurs sont actifs et engagés dans notre communauté. Parcourez notre sélection de produits pour personnaliser votre profil et afficher votre personnalité !</p>
+            <div class="notification is-info mt-5">Comment gagner de l'argent (<i class="fa-solid fa-coins has-text-warning"></i>) ?</div>
+            <p>Voici comment vous pouvez gagner de l'argent sur notre site :<br><br>
+            <ul>
+                <li>
+                    1 - En montant de niveau : plus vous passez de temps sur notre site et plus vous participez à la communauté, plus vous augmentez votre niveau. Chaque fois que vous atteignez un nouveau niveau, vous gagnez de l'argent.
+                </li><br>
+                <li>
+                    2 - En gagnant un concours : nous organisons régulièrement des concours sur notre site, où vous pouvez gagner de l'argent en participant et en gagnant.
+                </li><br>
+                <li>
+                    3 - En gagnant un quiz : nous avons également des quiz amusants sur une variété de sujets. Si vous gagnez un quiz, vous pouvez gagner de l'argent.
+                </li><br>
+                <li>
+                    4 - En recevant un don d'un autre utilisateur : si un autre utilisateur de notre site aime ce que vous faites et veut vous soutenir, il peut vous faire un don. Vous pouvez recevoir de l'argent de cette façon sans avoir à rien faire de plus.
+                </li><br>
+            </ul>
+    N'oubliez pas que pour certaines de ces méthodes, vous devrez atteindre un certain niveau pour être éligible. Mais ne vous inquiétez pas, c'est facile et amusant de monter de niveau sur notre site, alors continuez à participer et vous atteindrez bientôt ces niveaux.</p>
+        </div>
+    </div>
+{% endblock %}

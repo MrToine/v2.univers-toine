@@ -1,0 +1,17 @@
+{% extends "default/base.html.twig" %}
+
+{% block body %}
+    <div class="message is-info">
+        <div class="message-header">
+          <p>Modification des infos</p>
+        </div>
+        <div class="message-body">
+          On modifie ses infos
+        </div>
+    </div>
+    {{ form_start(form) }}
+      {{ form_row(form.display_name) }}
+      {{ form_label(form.avatarFile) }}
+      {{ form_widget(form.avatarFile) }}
+    {{ form_end(form) }}
+{% endblock %}

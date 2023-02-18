@@ -1,0 +1,106 @@
+{% extends "default/base.html.twig" %}
+
+{% block body %}
+    {% for message in app.flashes('success') %}        
+        <div class="notification is-success">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('danger') %}        
+        <div class="notification is-danger">{{ message }}</div>
+    {% endfor %}
+    <div class="columns">
+    	<div class="column is-one-fifth"><img class="image is-96x96" src="{{ asset('uploads/avatars/' ~ user.id ~ '/' ~ user.avatarName) }}" alt="Placeholder image"></div>
+    	<div class="column"><h1 class="title is-1">Profil de {{ user.displayName }}</h1></div>
+    </div>
+	<hr>
+	<div class="columns is-flex-wrap-wrap">
+		<div class="column">
+			<div class="box" style="background-color: rgba(255,255,255,0.2);color:#A8F1E7;">
+				<h4 class="subtitle is-4 has-text-light">Infos Générales</h4>
+				<p><strong>Pseudo : </strong>{{ user.displayName }}</p>
+				<p><strong>Inscrit le : </strong>{{ user.registrationDate | date('d/m/Y') }}</p>
+				<hr>
+				<h4 class="subtitle is-4 has-text-light">Infos RPG</h4>
+				<p><strong>Niveau : </strong>{{ user.level }}</p>
+				<p><strong>Points Exp. : </strong>{{ user.experience }}<i class="fa-solid fa-stairs has-text-link"></i></p>
+				<p><strong>Argent : </strong>{{ user.money }} <i class="fa-solid fa-coins has-text-warning"></i></p>
+			</div>
+		</div>
+		<div class="column">
+			<div class="box" style="background-color: rgba(255,255,255,0.2);color:#A8F1E7;">
+				<h4 class="subtitle is-4 has-text-light">Infos Forum</h4>
+				<p><strong>Nombre de sujets créer : </strong>{{ nbTopics }}</p>
+				<p><strong>Nombre de messages postés : </strong>{{ nbMessages }}</p>
+				<p><strong>Dernier sujet créer : </strong></p>
+				<hr>
+				<p><strong>Citation : </strong>{{ user.citation }}</p>
+				<p><strong>Signature : </strong></p>
+				<p>{{ user.signature }}</p>
+			</div>
+		</div>
+		<div class="column">
+			<div class="box" style="background-color: rgba(255,255,255,0.2);color:#A8F1E7;">
+				<h4 class="subtitle is-4 has-text-light">Option de membre</h4>
+				{% if app.user is same as user %}
+					<!--<p><a class="has-text-info" style="font-weight:bold;" href="#">Modifier le profil</a></p>
+					<p><a class="has-text-info" style="font-weight:bold;" href="#">Modifier les paramètres d'affichage</a>
+					<p><a class="has-text-success" style="font-weight:bold;" href="#">Paramètres de compte</a></p>
+					<p><a class="has-text-warning" style="font-weight:bold;" href="#">Faire une demande au admins</a></p>-->
+					<a class="button is-info js-modal-trigger data-target" href="#" data-target="modal-avatars">Mes avatars</a>
+					<a class="button is-info js-modal-trigger data-target" href="#" data-target="modal-themes">Mes Themes</a>
+				{% else %}
+					<p><a class="has-text-info" style="font-weight:bold;" href="#">Contacter</a></p>
+					<p><a class="has-text-warning" style="font-weight:bold;" href="#">Signaler</a></p>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	<div class="columns">
+		<div class="column">
+			<div class="box" style="background-color: rgba(255,255,255,0.2);">
+				<h4 class="subtitle is-4 has-text-light">
+					Biographie
+				</h4>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal" id="modal-avatars">
+		<div class="modal-background"></div>
+		<div class="modal-card">
+			<header class="modal-card-head">
+			   <p class="modal-card-title">Mes avatars</p>
+			   <button class="delete" aria-label="close"></button>
+			</header>
+			<section class="modal-card-body has-text-dark">
+				<p>Clique sur un des avatars pour l'utiliser dans ton profil publique.</p>
+				{% for avatar in avatars %}
+					<a href="{{ path('users.edit.avatar', {id: app.user.id, name: avatar.filename()}) }}"><img src="{{ asset('uploads/avatars/' ~ user.id ~ '/' ~ avatar.filename()) }}" alt="" class="image is-64x64 is-pulled-left" style="margin: 5px; border:1px solid black"></a>
+				{% endfor %}
+			</section>
+			<footer class="modal-card-foot">
+			 	<button class="button">Fermer</button>
+			</footer>
+		</div>
+	</div>
+
+	<div class="modal" id="modal-themes">
+		<div class="modal-background"></div>
+		<div class="modal-card">
+			<header class="modal-card-head">
+			   <p class="modal-card-title">Mes Thèmes</p>
+			   <button class="delete" aria-label="close"></button>
+			</header>
+			<section class="modal-card-body has-text-dark">
+				<p>Clique sur un des themes pour l'utiliser et modifier le design du site.</p>
+				{% for theme in user.item  %}
+					{% if theme.type is same as('theme') %}
+						<a href="{{ path('users.edit.theme', {id: app.user.id, name: theme.name}) }}"><img src="{{ asset(theme.img) }}" alt="" class="image is-pulled-left" style="width: 250px;margin: 5px; border:1px solid black"></a>
+					{% endif %}
+				{% endfor %}
+			</section>
+			<footer class="modal-card-foot">
+			 	<button class="button">Fermer</button>
+			</footer>
+		</div>
+	</div>
+{% endblock %}

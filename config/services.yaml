@@ -10,10 +10,21 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-    
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
+    
+    session:
+        class: Symfony\Component\HttpFoundation\Session\Session
+    
+    Symfony\Component\HttpFoundation\Session\SessionInterface:
+        alias: session
+
+    App\Security\TokenRegistrationProvider:
+        arguments:
+            $entityManager: '@doctrine.orm.entity_manager'
+            $session: '@session'
+
     App\:
         resource: '../src/'
         exclude:
@@ -25,9 +36,21 @@ services:
         resource : "../src/EntityListener"
         tags : ["doctrine.orm.entity_listener"]
 
+    App\EventListener\RememberUserListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
     App\Services\:
         resource : "../src/Services"
         tags : ["controller.service_arguments"]
 
+    # config/services.yaml
+    App\Services\LevelService:
+            public: true
+            
+
+    App\EventSubscriber\LevelSubscriber:
+        tags:
+            - { name: kernel.event_subscriber }
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

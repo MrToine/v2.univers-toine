@@ -1,0 +1,60 @@
+{% extends "default/base.html.twig" %}
+{% block body %}
+    {% for message in app.flashes('success') %}        
+        <div class="notification is-success">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('danger') %}        
+        <div class="notification is-danger">{{ message }}</div>
+    {% endfor %}
+    <div class="tabs is-left">
+      <ul>
+        <li><a href="{{ path('shop.home') }}" class=" has-text-light">Accueil</a></li>
+        <li class="is-active"><a class=" has-text-info">Thèmes</a></li>
+        <li><a class=" has-text-light" href="{{ path('shop.avatar') }}">Avatars</a></li>
+        <li><a class="has-text-light">Sorts</a></li>
+      </ul>
+    </div>
+    <h2 class="title is-2">Boutique des Thèmes</h2>
+    <div class="columns is-flex-wrap-wrap">
+        {% for theme in themes %}
+            <div class="column is-one-quarter">
+                <div class="card">
+                  <div class="card-image">
+                    <figure class="image is-2by1">
+                      <img src="{{ asset(theme.img) }}" alt="{{ theme.name }} Theme">
+                    </figure>
+                  </div>
+                  <div class="card-content">
+                    <div class="media">
+                      <div class="media-content">
+                        <p class="title is-4 has-text-dark">{{ theme.name }}</p>
+                      </div>
+                    </div>
+                    <div class="content">
+                      {{ theme.description }}
+                    </div>
+                  </div>
+                  <footer class="card-footer">
+                    <a class="js-modal-trigger data-target card-footer-item" href="#" data-target="modal-confirm-paid-{{ theme.id }}">Acheter {{ theme.price }}<i class="fa-solid fa-coins has-text-warning"></i></a>
+                  </footer>
+                </div>
+            </div>
+            <div class="modal" id="modal-confirm-paid-{{ theme.id }}">
+              <div class="modal-background"></div>
+              <div class="modal-card">
+                <header class="modal-card-head">
+                  <p class="modal-card-title">Achat d'un thème</p>
+                  <button class="delete" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body has-text-dark">
+                    <p>Veut tu vraiment acheter ce thème pour {{ theme.price }}<i class="fa-solid fa-coins has-text-warning"></i> ?
+                        <a href="{{ path('shop.buy', {id: theme.id, token: csrf_token('shop')}) }}" class="button is-success">Acheter</a>
+                    </p>
+                </section>
+                <footer class="modal-card-foot"><button class="button is-danger" aria-label="close">Annuler</button></footer>
+              </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
