@@ -39,7 +39,7 @@
 		<div class="column">
 			<div class="box" style="background-color: rgba(255,255,255,0.2);color:#A8F1E7;">
 				<h4 class="subtitle is-4 has-text-light">Option de membre</h4>
-				{% if app.user is same as user %}
+				{% if app.user.id is same as user.id %}
 					<!--<p><a class="has-text-info" style="font-weight:bold;" href="#">Modifier le profil</a></p>
 					<p><a class="has-text-info" style="font-weight:bold;" href="#">Modifier les paramètres d'affichage</a>
 					<p><a class="has-text-success" style="font-weight:bold;" href="#">Paramètres de compte</a></p>

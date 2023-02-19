@@ -20,10 +20,10 @@ services:
     Symfony\Component\HttpFoundation\Session\SessionInterface:
         alias: session
 
-    App\Security\TokenRegistrationProvider:
-        arguments:
-            $entityManager: '@doctrine.orm.entity_manager'
-            $session: '@session'
+    #App\Security\TokenRegistrationProvider:
+    #    arguments:
+    #        $entityManager: '@doctrine.orm.entity_manager'
+    #        $session: '@session'
 
     App\:
         resource: '../src/'

@@ -112,8 +112,6 @@ class ForumTopicController extends BaseController
         $categories = null;
         $forums = null;
 
-        $topic = $repositoryTopic->find(['id' => $topic]);
-
         // t = topic m = member mi = member_item
         $posts = $paginator->paginate(
             $repositoryPost

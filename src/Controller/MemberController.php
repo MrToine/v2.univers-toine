@@ -156,6 +156,7 @@ class MemberController extends BaseController
         $avatars = null;
         $themes = null;
         
+        
         if($choosenUser === $this->getUser())
         {
             $avatarDir = 'uploads/avatars/' . $choosenUser->getId();
@@ -177,6 +178,7 @@ class MemberController extends BaseController
 
         $postRepository = $manager->getRepository(ForumPost::class);
         $countMessages = $postRepository->count(['author' => $choosenUser]);
+
 
         return $this->render($this->theme . '/users/profile.html.twig', [
             'user' => $user, 

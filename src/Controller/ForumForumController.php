@@ -45,7 +45,7 @@ class ForumForumController extends BaseController
          * @var array
          */
 
-        $forum = $repositoryForum->find(['id' => $forum]);
+        $forum = $repositoryForum->find($forum);
 
         $user = $this->getUser();
         $topicsQuery = $repositoryTopic->createQueryBuilder('t')
@@ -61,6 +61,7 @@ class ForumForumController extends BaseController
             ->setParameter('forum', $forum)
             ->orderBy('t.updateAt', 'DESC')
             ->getQuery();
+
 
         $topics = $paginator->paginate(
             $topicsQuery,
